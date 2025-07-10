@@ -91,11 +91,17 @@
     "@dcloudio/webpack-uni-pages-loader": "^2.0.2-4060620250520001",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "autoprefixer": "^10.4.21",
     "babel-plugin-import": "^1.11.0",
-    "cross-env": "^7.0.2",
+    "cross-env": "^7.0.3",
     "jest": "^25.4.0",
     "postcss-comment": "^2.0.0",
-    "vue-template-compiler": ">= 2.6.14 < 2.7"
+    "postcss-import": "^16.1.1",
+    "sass": "^1.89.2",
+    "sass-loader": "latest",
+    "vue-template-compiler": ">= 2.6.14 < 2.7",
+    "webpack": "^5.100.0",
+    "webpack-cli": "^6.0.1"
   },
   "browserslist": [
     "Android >= 4.4",
