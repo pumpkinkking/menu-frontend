@@ -4,61 +4,30 @@
     <view class="top-profile">
       <view class="profile-header">
         <view class="avatar-container">
-          <image class="avatar" src="/static/avatar/you.png"></image>
-          <image class="avatar couple" src="/static/avatar/partner.png"></image>
+          <image class="avatar" :src="userInfo.avatarUrls.you"></image>
+          <image class="avatar couple" :src="userInfo.avatarUrls.partner"></image>
         </view>
         <view class="profile-info">
-          <text class="couple-name">甜蜜情侣</text>
-          <text class="love-level">爱情等级 Lv.8</text>
+          <text class="couple-name">{{ userInfo.coupleName }}</text>
+          <text class="love-level">爱情等级 Lv.{{ userInfo.loveLevel }}</text>
         </view>
       </view>
     </view>
 
     <!-- 中部情侣数据看板 -->
     <view class="stats-board">
-      <view class="stat-item">
-        <text class="stat-value">45</text>
-        <text class="stat-label">共同烹饪天数</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-value">86%</text>
-        <text class="stat-label">口味默契度</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-value">24</text>
-        <text class="stat-label">收藏菜谱</text>
+      <view class="stat-item" v-for="stat in stats" :key="stat.id">
+        <text class="stat-value">{{ stat.value }}</text>
+        <text class="stat-label">{{ stat.label }}</text>
       </view>
     </view>
 
     <!-- 底部功能菜单 -->
     <view class="function-menu">
-      <view class="menu-section">
-        <view class="menu-item" @click="navigateToFridge">
-          <image class="menu-icon" src="/static/icon/fridge.png"></image>
-          <text class="menu-name">冰箱管理</text>
-        </view>
-        <view class="menu-item">
-          <image class="menu-icon" src="/static/icon/collection.png"></image>
-          <text class="menu-name">我的收藏</text>
-        </view>
-        <view class="menu-item">
-          <image class="menu-icon" src="/static/icon/task.png"></image>
-          <text class="menu-name">情侣任务</text>
-        </view>
-      </view>
-
-      <view class="menu-section">
-        <view class="menu-item">
-          <image class="menu-icon" src="/static/icon/setting.png"></image>
-          <text class="menu-name">设置</text>
-        </view>
-        <view class="menu-item">
-          <image class="menu-icon" src="/static/icon/help.png"></image>
-          <text class="menu-name">帮助中心</text>
-        </view>
-        <view class="menu-item">
-          <image class="menu-icon" src="/static/icon/about.png"></image>
-          <text class="menu-name">关于我们</text>
+      <view class="menu-section" v-for="section in menuSections" :key="section.id">
+        <view class="menu-item" v-for="item in section.items" :key="item.id" @click="navigateTo(item.path)">
+          <image class="menu-icon" :src="item.icon"></image>
+          <text class="menu-name">{{ item.name }}</text>
         </view>
       </view>
     </view>
@@ -66,18 +35,27 @@
 </template>
 
 <script>
+import profileMock from '@/mock/profile';
+
 export default {
   data() {
     return {
-      // 页面数据
+      userInfo: profileMock.userInfo,
+      stats: profileMock.stats,
+      menuSections: profileMock.menuSections
     };
   },
   methods: {
-    navigateToFridge() {
-      // 跳转到冰箱管理页面
-      uni.navigateTo({
-        url: '/pages/fridge/fridge'
-      });
+    /**
+     * 导航到指定页面
+     * @param {string} path - 目标页面路径
+     */
+    navigateTo(path) {
+      if (path) {
+        uni.navigateTo({
+          url: path
+        });
+      }
     }
   }
 };

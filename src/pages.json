@@ -41,24 +41,6 @@
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
-		},
-		{
-			"path": "pages/kitchen/index",
-			"style": {
-				"navigationBarTitleText": "厨房"
-			}
-		},
-		{
-			"path": "pages/order/index",
-			"style": {
-				"navigationBarTitleText": "订单"
-			}
-		},
-		{
-			"path": "pages/store/index",
-			"style": {
-				"navigationBarTitleText": "商店"
-			}
 		}
 	],
 	"globalStyle": {

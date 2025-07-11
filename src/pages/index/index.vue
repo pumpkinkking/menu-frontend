@@ -23,176 +23,46 @@
       <!-- 菜谱广场内容区域 -->
       <view class="tab-content">
         <!-- 厨房Tab -->
-        <view class="tab-pane" v-if="currentTab === 0">
-          <view class="content-area">
-            <!-- 厨房页面内容 -->
-            <view class="cooking-status">
-              <text class="section-title">当前烹饪</text>
-              <view class="status-card">
-                <image class="dish-img" src="/static/images/salmon.jpg" mode="aspectFill"></image>
-                <view class="dish-info">
-                  <text class="dish-name">香煎三文鱼</text>
-                  <view class="cooking-steps">
-                    <text class="step-item active">准备食材</text>
-                    <text class="step-item">煎制</text>
-                    <text class="step-item">调味</text>
-                  </view>
-                  <view class="progress-container">
-                    <progress percent="33" stroke-width="4" activeColor="#ff85a2" backgroundColor="#f0f0f0"></progress>
-                  </view>
-                </view>
-              </view>
-            </view>
-
-            <view class="ingredients-list">
-              <text class="section-title">食材库存</text>
-              <view class="ingredient-item" v-for="ingredient in ingredients" :key="ingredient.id">
-                <text class="ingredient-name">{{ ingredient.name }}</text>
-                <view class="ingredient-quantity">
-                  <text :class="ingredient.quantity <= 5 ? 'low-quantity' : ''">{{ ingredient.quantity }} {{
-                    ingredient.unit }}</text>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
+        <Fridge v-if="currentTab === 0" :ingredients="ingredients" @add-ingredient="handleAddIngredient" />
 
         <!-- 点菜Tab -->
-        <view class="tab-pane" v-if="currentTab === 1">
-          <view class="content-area">
-            <!-- 点菜页面内容 -->
-            <scroll-view class="category-scroll" scroll-x>
-              <view class="category-list">
-                <view class="category-item" :class="item.active ? 'active' : ''" v-for="item in menuCategories" :key="item.id" @click="handleCategoryClick(item)">
-                  {{ item.name }}
-                </view>
-              </view>
-            </scroll-view>
-
-            <view class="dish-list">
-              <view class="dish-item" v-for="item in menuItems" :key="item.id">
-                <image class="dish-img" :src="item.image" mode="aspectFill"></image>
-                <view class="dish-info">
-                  <text class="dish-title">{{ item.name }}</text>
-                  <text class="dish-desc">{{ item.desc }}</text>
-                  <view class="dish-price">
-                    <text class="price">¥{{ item.price }}</text>
-                    <view class="add-btn" @click="addToCart(item)">
-                      <text class="btn-text">+</text>
-                    </view>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
+        <Menu v-if="currentTab === 1" :menu-categories="menuCategories" :menu-items="menuItems" @category-click="handleCategoryClick" @add-to-cart="addToCart" />
 
         <!-- 订单Tab -->
-        <view class="tab-pane" v-if="currentTab === 2">
-          <view class="content-area">
-            <!-- 订单页面内容 -->
-            <view class="order-filters">
-              <view class="filter-item" :class="item.active ? 'active' : ''" v-for="item in orderFilters" :key="item.id" @click="handleFilterClick(item)">
-                {{ item.name }}
-              </view>
-            </view>
-
-            <view class="order-list">
-              <view class="order-item" v-for="order in orders" :key="order.id">
-                <view class="order-header">
-                  <text class="order-number">订单号: {{ order.orderNo }}</text>
-                  <text class="order-date">{{ order.date }}</text>
-                </view>
-                <view class="order-status">
-                  <text
-                    :class="order.status === '待付款' ? 'status-pending' : order.status === '配送中' ? 'status-delivering' : 'status-completed'">{{
-                    order.status }}</text>
-                </view>
-                <view class="order-details">
-                  <view class="dish-info" v-for="dish in order.dishes" :key="dish.id">
-                    <text class="dish-name">{{ dish.name }} x{{ dish.quantity }}</text>
-                  </view>
-                </view>
-                <view class="order-total">
-                  <text class="total-text">总计: ¥{{ order.totalPrice }}</text>
-                  <view class="pay-btn" v-if="order.status === '待付款'" @click="payOrder(order.id)">
-                    <text class="btn-text">去支付</text>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
+        <Order v-if="currentTab === 2" :order-filters="orderFilters" :orders="orders" @filter-click="handleFilterClick" @pay-order="payOrder" />
 
         <!-- 商店Tab -->
-        <view class="tab-pane" v-if="currentTab === 3">
-          <view class="content-area">
-            <!-- 商店页面内容 -->
-            <scroll-view class="category-scroll" scroll-x>
-              <view class="category-list">
-                <view class="category-item" :class="item.active ? 'active' : ''" v-for="item in productCategories" :key="item.id" @click="handleCategoryClick(item)">
-                  {{ item.name }}
-                </view>
-              </view>
-            </scroll-view>
-
-            <view class="product-list">
-              <view class="product-item" v-for="product in products" :key="product.id">
-                <image class="product-img" :src="product.image" mode="aspectFill"></image>
-                <view class="product-info">
-                  <text class="product-title">{{ product.name }}</text>
-                  <text class="product-spec">{{ product.spec }}</text>
-                  <view class="product-price">
-                    <text class="price">¥{{ product.price }}</text>
-                    <view class="add-btn" @click="addToCart(product)">
-                      <text class="btn-text">+</text>
-                    </view>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
+        <Shop v-if="currentTab === 3" :product-categories="productCategories" :products="products" @category-click="handleCategoryClick" @add-to-cart="addToCart" @add-reward="handleAddReward" />
 
         <!-- 菜谱广场Tab -->
-        <view class="tab-pane" v-if="currentTab === 4">
-          <!-- 内容流区域 -->
-          <view class="content-area">
-            <scroll-view class="category-scroll" scroll-x>
-              <view class="category-list">
-                <view class="category-item" :class="item.active ? 'active' : ''" v-for="item in recipeCategories" :key="item.id" @click="handleCategoryClick(item)">
-                  {{ item.name }}
-                </view>
-              </view>
-            </scroll-view>
+        <RecipeSquare v-if="currentTab === 4" :recipe-categories="recipeCategories" :recipes="recipes" @category-click="handleCategoryClick" />
 
-            <view class="recipe-list">
-              <view class="recipe-card" v-for="recipe in recipes" :key="recipe.id">
-                <image class="recipe-img" :src="recipe.image" mode="aspectFill"></image>
-                <view class="recipe-info">
-                  <text class="recipe-title">{{ recipe.title }}</text>
-                  <view class="recipe-meta">
-                    <text class="meta-item">{{ recipe.time }}</text>
-                    <text class="meta-item">{{ recipe.category }}</text>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
+        <!-- 菜篮子Tab -->
+        <Basket v-if="currentTab === 5" :menu-items="menuItems" :basket-items="basketItems" />
+
       </view>
     </view>
 
-    <!-- 悬浮协作按钮 -->
-    <view class="floating-btn" @click="startCollaboration">
-      <text class="btn-text">+</text>
-    </view>
   </view>
 </template>
 
 <script>
 import { recipeCategories, menuCategories, productCategories, orderFilters, recipes, ingredients, menuItems, orders, products, statsData, tabs } from '@/mock/data';
+import Fridge from './subpages/Fridge.vue';
+import Menu from './subpages/Menu.vue';
+import Order from './subpages/Order.vue';
+import Shop from './subpages/Shop.vue';
+import RecipeSquare from './subpages/RecipeSquare.vue';
+import Basket from './subpages/Basket.vue';
 export default {
+  components: {
+    Fridge,
+    Menu,
+    Order,
+    Shop,
+    RecipeSquare,
+    Basket
+  },
   data() {
     return {
       currentTab: 0, // 当前选中的Tab索引，默认厨房
@@ -206,7 +76,8 @@ export default {
       orders,
       products,
       statsData,
-      tabs
+      tabs,
+      basketItems: []
     };
   },
   methods: {
@@ -224,7 +95,7 @@ export default {
       },
       switchTab(index) {
         this.currentTab = index;
-      }
+      },
     addToCart(item) {
       // 添加到购物车逻辑
       uni.showToast({ title: '已添加到购物车', icon: 'success', duration: 1500 });
@@ -232,6 +103,28 @@ export default {
     payOrder(orderId) {
       // 支付订单逻辑
       uni.showToast({ title: '支付功能待实现', icon: 'none', duration: 1500 });
+    },
+    /**
+     * 处理添加新食材
+     * @param {Object} newIngredient - 新食材对象
+     */
+    handleAddIngredient(newIngredient) {
+      this.ingredients.push(newIngredient);
+    },
+    /**
+     * 处理添加自定义奖励
+     * @param {Object} reward - 新添加的奖励对象
+     */
+    handleAddReward(reward) {
+      // 将新奖励添加到商品列表
+      this.products.push({
+        ...reward,
+        image: '/static/images/reward-default.png', // 默认奖励图片
+        spec: reward.description || '自定义奖励',
+        price: reward.points,
+        categoryId: 'custom'
+      });
+      uni.showToast({ title: '奖励已添加到商店', icon: 'success' });
     },
     handleTabClick(tab) {
       if (tab.type === 'navigate') {
@@ -379,12 +272,13 @@ export default {
 
 /* 顶部区域 */
 .top-area {
-  height: 25vh;
+  height: 12vh;
   background: linear-gradient(135deg, #ffccd5 0%, #ffe6e6 100%);
   padding: 30px 16px 16px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   color: white;
+  margin: 0 16px;
 }
 
 /* 增加stats-cards与顶部距离 */

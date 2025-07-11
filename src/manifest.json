@@ -55,6 +55,7 @@
 	},
 	"mp-weixin": { /* 微信小程序特有相关 */
 		"appid": "",
+		"lazyCodeLoading": "requiredComponents",
 		"setting": {
 			"urlCheck": false
 		},
@@ -72,4 +73,5 @@
     "mp-qq" : {
         "usingComponents" : true
     }
+	
 }

@@ -30,10 +30,10 @@ export const productCategories = [
 
 // 订单过滤器数据
 export const orderFilters = [
-  { id: 1, name: '全部订单', active: true },
+  { id: 1, name: '全部', active: true },
   { id: 2, name: '待付款', active: false },
-  { id: 3, name: '配送中', active: false },
-  { id: 4, name: '已完成', active: false }
+  { id: 3, name: '已完成', active: false },
+  { id: 4, name: '我是大厨', active: false }
 ];
 
 // 菜谱数据
@@ -44,14 +44,14 @@ export const recipes = [
   { id: 4, title: '泰式青咖喱鸡', image: '/static/images/recipe-main4.jpg', time: '30分钟', category: '东南亚' }
 ];
 
-// 厨房食材数据
+// 冰箱食材数据
 export const ingredients = [
-  { id: 1, name: '三文鱼', quantity: 2, unit: '块' },
-  { id: 2, name: '橄榄油', quantity: 150, unit: 'ml' },
-  { id: 3, name: '柠檬', quantity: 3, unit: '个' },
-  { id: 4, name: '西兰花', quantity: 1, unit: '颗' },
-  { id: 5, name: '盐', quantity: 100, unit: 'g' },
-  { id: 6, name: '黑胡椒', quantity: 50, unit: 'g' }
+  { id: 1, name: '三文鱼', quantity: 2, unit: '块', location: '冷冻', freshness: '新鲜' },
+  { id: 2, name: '橄榄油', quantity: 150, unit: 'ml', location: '常温', freshness: '新鲜' },
+  { id: 3, name: '柠檬', quantity: 3, unit: '个', location: '冷藏', freshness: '一般' },
+  { id: 4, name: '西兰花', quantity: 1, unit: '颗', location: '冷藏', freshness: '新鲜' },
+  { id: 5, name: '盐', quantity: 100, unit: 'g', location: '常温', freshness: '新鲜' },
+  { id: 6, name: '黑胡椒', quantity: 50, unit: 'g', location: '常温', freshness: '过期' }
 ];
 
 // 点菜页面数据
@@ -90,9 +90,10 @@ export const statsData = [
 
 // Tab导航数据
 export const tabs = [
-  { name: '厨房', index: 0, type: 'switch' },
+  { name: '冰箱', index: 0, type: 'switch' },
   { name: '点菜', index: 1, type: 'switch' },
   { name: '订单', index: 2, type: 'switch' },
   { name: '商店', index: 3, type: 'switch' },
-  { name: '菜谱广场', index: 4, type: 'switch' }
+  { name: '菜谱广场', index: 4, type: 'switch' },
+  { name: '菜篮子', index: 5, type: 'switch' }
 ];
