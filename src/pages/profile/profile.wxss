@@ -1,73 +1,108 @@
-/* 个人中心页面样式 */
-.page-container {
-  padding-bottom: 120rpx;
+/* 基础样式 */
+.profile-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
 }
 
-.user-info {
-  background-color: #ff6b6b;
+/* 顶部个人信息区 */
+.top-profile {
+  background: linear-gradient(135deg, #ffccd5 0%, #ffe6e6 100%);
+  padding: 40px 16px 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   color: white;
-  padding: 60rpx 30rpx 40rpx;
-  text-align: center;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-container {
+  display: flex;
+  margin-bottom: 16px;
 }
 
 .avatar {
-  width: 160rpx;
-  height: 160rpx;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background-color: white;
-  margin: 0 auto 20rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 3px solid white;
 }
 
-.nickname {
-  font-size: 36rpx;
+.avatar.couple {
+  margin-left: -15px;
+}
+
+.couple-name {
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 10rpx;
+  margin-bottom: 4px;
 }
 
-.user-desc {
-  font-size: 28rpx;
+.love-level {
+  font-size: 14px;
   opacity: 0.9;
 }
 
-.menu-list {
-  margin-top: 20rpx;
+/* 中部数据看板 */
+.stats-board {
+  display: flex;
+  justify-content: space-around;
   background-color: white;
+  border-radius: 16px;
+  padding: 20px 16px;
+  margin: -10px 16px 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 底部功能菜单 */
+.function-menu {
+  padding: 0 16px 16px;
+}
+
+.menu-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .menu-item {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 0 30rpx;
-  height: 100rpx;
-  border-bottom: 1rpx solid #f5f5f5;
 }
 
 .menu-icon {
-  width: 40rpx;
-  height: 40rpx;
-  margin-right: 25rpx;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
 }
 
-.menu-text {
-  flex: 1;
-  font-size: 32rpx;
-}
-
-.arrow-icon {
-  color: #999;
-  font-size: 32rpx;
-}
-
-.logout-btn {
-  margin: 40rpx 30rpx 0;
-  height: 90rpx;
-  background-color: #f5f5f5;
-  color: #ff6b6b;
-  border-radius: 16rpx;
-  text-align: center;
-  line-height: 90rpx;
-  font-size: 32rpx;
+.menu-name {
+  font-size: 14px;
+  color: #333;
 }

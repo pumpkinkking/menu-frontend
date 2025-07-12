@@ -1,8 +1,7 @@
 {
-  "navigationBarTitleText": "主页",
   "usingComponents": {
-    "Menu": "./subpages/Menu/index",
     "Fridge": "./subpages/Fridge/index",
+    "Menu": "./subpages/Menu/Menu",
     "Order": "./subpages/Order/index",
     "Shop": "./subpages/Shop/index",
     "RecipeSquare": "./subpages/RecipeSquare/index",

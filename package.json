@@ -8,12 +8,14 @@
     "lint": "eslint . --ext .js,.wxml,.wxss,.json"
   },
   "dependencies": {
+    "@vant/weapp": "^1.11.7",
     "core-js": "^3.8.3",
     "trae": "^1.4.2"
   },
   "devDependencies": {
     "@types/wechat-miniprogram": "^3.4.0",
     "autoprefixer": "^10.4.21",
+    "miniprogram-api-typings": "^4.0.7",
     "postcss": "^8.4.47",
     "postcss-comment": "^2.0.0",
     "postcss-import": "^16.1.1",

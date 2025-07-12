@@ -1,0 +1,55 @@
+<view class="tab-pane">
+  <!-- 二维码邀请弹窗 -->
+  <view class="qr-modal" wx:if="{{showQrCodeModal}}">
+    <view class="qr-card">
+      <image class="qr-code" src="{{qrCodeUrl}}" mode="widthFix"></image>
+      <text class="qr-desc">扫码邀请好友一起点餐</text>
+      <view class="qr-buttons">
+        <button class="qr-btn share-btn" bindtap="handleShare">分享</button>
+        <button class="qr-btn save-btn" bindtap="handleSave">保存</button>
+      </view>
+    </view>
+  </view>
+  
+  <view class="content-area">
+    <!-- 点菜页面内容 -->
+    <scroll-view class="category-scroll" scroll-x>
+      <view class="category-list">
+        <view class="category-item {{item.active ? 'active' : ''}}" wx:for="{{menuCategories}}" wx:key="item.id" bindtap="handleCategoryClick" data-category="{{item}}">
+          {{item.name}}
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="dish-list">
+      <view class="dish-item" wx:for="{{menuItems}}" wx:key="item.id">
+        <image class="dish-img" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="dish-info">
+          <text class="dish-title">{{item.name}}</text>
+          <text class="dish-desc">{{item.desc}}</text>
+          <view class="dish-price">
+            <text class="price">¥{{item.price}}</text>
+            <view class="add-btn" bindtap="addToCart" data-item="{{item}}">
+              <text class="btn-text">+</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar">
+    <button class="shake-btn" bindtap="handleShake">
+        <icon type="refresh" size="16"></icon> 摇一摇
+      </button>
+      <view class="right-buttons">
+        <button class="invite-btn" bindtap="handleInvite">
+          <icon type="people" size="16"></icon> 邀请
+        </button>
+        <button class="order-btn" bindtap="handleOrder">
+          <icon type="cart" size="16"></icon> 下单
+        </button>
+    </view>
+  </view>
+</view>

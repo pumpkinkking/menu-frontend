@@ -5,41 +5,176 @@
   justify-content: center;
   min-height: 100vh;
   padding: 0 40rpx;
-  background-color: #f5f9ff;
+  background: linear-gradient(135deg, #f5f9ff 0%, #eef5ff 100%);
+}
+
+/* 装饰元素 */
+.decor-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300rpx;
+  background: radial-gradient(circle at 30% 30%, rgba(7, 193, 96, 0.1) 0%, transparent 60%);
+  z-index: 0;
+}
+
+.decor-bottom {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 300rpx;
+  background: radial-gradient(circle at 70% 70%, rgba(255, 107, 107, 0.1) 0%, transparent 60%);
+  z-index: 0;
+}
+
+/* 登录卡片 */
+.login-card {
+  width: 100%;
+  max-width: 500rpx;
+  background-color: white;
+  border-radius: 24rpx;
+  padding: 60rpx 40rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
-  width: 200rpx;
-  height: 200rpx;
-  margin-bottom: 60rpx;
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 40rpx;
+  border-radius: 50%;
+  box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.2);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 .logo image {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  object-fit: cover;
 }
 
 .title {
-  font-size: 32rpx;
+  font-size: 36rpx;
   color: #333333;
-  margin-bottom: 80rpx;
-  font-weight: bold;
+  margin-bottom: 10rpx;
+  font-weight: 600;
 }
 
-.login-btn {
+.subtitle {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 60rpx;
+  text-align: center;
+}
+
+/* 微信登录按钮 */
+.wechat-login-btn {
   width: 100%;
-  height: 90rpx;
-  background-color: #07c160;
+  height: 96rpx;
+  background: linear-gradient(135deg, #07c160 0%, #06b358 100%);
   color: white;
-  border-radius: 45rpx;
-  font-size: 32rpx;
-  margin-bottom: 40rpx;
+  border-radius: 48rpx;
+  font-size: 34rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30rpx;
+  box-shadow: 0 6rpx 16rpx rgba(7, 193, 96, 0.3);
+  transition: all 0.3s ease;
+  border: none;
 }
 
+.wechat-login-btn::before {
+  content: "";
+  display: inline-block;
+  width: 44rpx;
+  height: 44rpx;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMC00LjQ4LTEwLTEwLTEwem01LjY2IDE1LjM0Yy0uMzcuMzctLjk0LjU2LTEuNTYuNTZzLTEuMTktLjE5LTEuNTYtLjU2Yy0uMzctLjM3LS41Ni0uOTQtLjU2LTEuNTZzLjE5LTEuMTkuNTYtMS41NmMuMzcuMzcuOTQuNTYuMTU2LjU2aDMuOTdjLjM3IDAgLjk0LS4xOSAxLjU2LS41NmMuMzctLjM3LjU2LS45NC41Ni0xLjU2cy0uMTktMS4xOS0uNTYtMS41NmMtLjM3LS4zNy0uOTQtLjU2LTEuNTYtLjU2aC01LjgyYy0uMzcgMC0uOTQuMTktMS41Ni41NmMtLjM3LjM3LS41Ni45NC0uNTYgMS41NnMuMTkgMS4xOS41NiAxLjU2YzAuMzcgMCAwLjk0LS4xOSAxLjU2LS41NmMuMzctLjM3Ljk0LS41NiAxLjU2LS41NmgyLjA5bC4wNi4wNmMuMjYuMjYuNjEuNDIgMS4wMS40MmgzLjgyYy4zNyAwIC45NC0uMTkgMS41Ni0uNTZjLjM3LS4zNy41Ni0uOTQuNTYtMS41NnMtLjE5LTEuMTktLjU2LTEuNTZ6bS02LjY2LTYuODhjLTEuMzggMC0yLjUgLTEuMTItMi41LTIuNXMxLjEyLTIuNSAyLjUtMi41IDIuNSAxLjEyIDIuNSAyLjUtMS4xMiAyLjUtMi41IDIuNXoiLz48L3N2Zz4=');
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 16rpx;
+}
+
+.wechat-login-btn:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 8rpx 20rpx rgba(7, 193, 96, 0.4);
+}
+
+.wechat-login-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4rpx 12rpx rgba(7, 193, 96, 0.3);
+}
+
+/* 其他登录方式 */
+.other-login {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 40rpx;
+}
+
+.other-login-text {
+  font-size: 26rpx;
+  color: #666666;
+  position: relative;
+}
+
+.other-login-text::before, .other-login-text::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 80rpx;
+  height: 1rpx;
+  background-color: #eeeeee;
+}
+
+.other-login-text::before {
+  left: -100rpx;
+}
+
+.other-login-text::after {
+  right: -100rpx;
+}
+
+/* 账号密码登录链接 */
+.account-login {
+  margin-top: 40rpx;
+  font-size: 28rpx;
+  color: #07c160;
+  text-decoration: none;
+  padding: 10rpx 20rpx;
+  border-radius: 20rpx;
+  transition: background-color 0.2s ease;
+}
+
+.account-login:hover {
+  background-color: rgba(7, 193, 96, 0.05);
+}
+
+/* 底部提示 */
 .tips {
   font-size: 24rpx;
   color: #999999;
   text-align: center;
   line-height: 1.5;
+  margin-top: 60rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.tips navigator {
+  color: #07c160;
+  text-decoration: none;
 }

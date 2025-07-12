@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "菜单",
+  "usingComponents": {
+    "icon": "/miniprogram_npm/@vant/weapp/icon/index"
+  }
+}

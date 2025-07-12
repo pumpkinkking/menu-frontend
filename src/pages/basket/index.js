@@ -1,80 +1,66 @@
-// 导入全局状态管理工具
-const store = require('../../utils/store.js');
-
+// src/pages/basket/index.js
 Page({
+
+  /**
+   * 页面的初始数据
+   */
   data: {
-    // 添加食材弹窗显示状态
-    showAddDialog: false,
-    // 购物篮数据
-    basketItems: []
-  },
 
-  onLoad() {
-    // 从全局状态加载购物篮数据
-    const basketData = store.getData('basketItems') || [];
-    this.setData({ basketItems: basketData });
   },
 
   /**
-   * 显示添加菜品弹窗
+   * 生命周期函数--监听页面加载
    */
-  showAddDialog() {
-    this.setData({ showAddDialog: true });
+  onLoad(options) {
+
   },
 
   /**
-   * 关闭添加菜品弹窗
+   * 生命周期函数--监听页面初次渲染完成
    */
-  onCloseDialog() {
-    this.setData({ showAddDialog: false });
+  onReady() {
+
   },
 
   /**
-   * 处理从弹窗组件确认添加食材
-   * @param {Object} e - 事件对象，包含弹窗返回的食材数据
+   * 生命周期函数--监听页面显示
    */
-  handleAddIngredient(e) {
-    const dish = e.detail;
-    const { basketItems } = this.data;
+  onShow() {
 
-    // 检查是否已存在同名食材
-    const existingIndex = basketItems.findIndex(
-      item => item.name === dish.name
-    );
-
-    if (existingIndex > -1) {
-      // 如果已存在，增加数量
-      basketItems[existingIndex].quantity += dish.quantity;
-    } else {
-      // 如果不存在，添加新食材
-      basketItems.push({
-        id: Date.now(),
-        ...dish
-      });
-    }
-
-    // 更新本地数据和全局状态
-    this.setData({ basketItems });
-    store.setData('basketItems', basketItems);
-
-    wx.showToast({ title: '添加成功', icon: 'success' });
   },
 
   /**
-   * 从菜篮子中删除食材
-   * @param {Object} e - 事件对象，包含食材索引
+   * 生命周期函数--监听页面隐藏
    */
-  removeIngredient(e) {
-    const { index } = e.currentTarget.dataset;
-    const { basketItems } = this.data;
+  onHide() {
 
-    // 删除指定索引的食材
-    basketItems.splice(index, 1);
+  },
 
-    // 更新本地数据和全局状态
-    this.setData({ basketItems });
-    store.setData('basketItems', basketItems);
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload() {
 
-    wx.showToast({ title: '已删除', icon: 'none' });
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh() {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom() {
+
+  },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage() {
+
   }
-});
+})

@@ -24,6 +24,7 @@
     "selectedColor": "#ff6b6b",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
+    "safeAreaInsetBottom": "always",
     "list": [
       {
         "pagePath": "src/pages/plan/plan",
