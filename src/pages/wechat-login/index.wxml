@@ -1,0 +1,21 @@
+<view class="wechat-login-container">
+  <view class="logo">
+    <image src="/static/icon/logo.png" class="logo-img"/>
+    <text class="app-name">情侣点餐</text>
+  </view>
+  <view class="login-card">
+    <button bindtap="loginByWechat" class="wechat-btn">
+      <image src="/static/icon/wechat.png" class="wechat-icon"/>
+      <text>微信快捷登录</text>
+    </button>
+    <navigator url="/pages/login/login" class="other-login">
+      <text>用其他手机号登录</text>
+    </navigator>
+  </view>
+  <view class="agreement">
+    <text>登录即同意</text>
+    <text class="link">《用户协议》</text>
+    <text>和</text>
+    <text class="link">《隐私政策》</text>
+  </view>
+</view>

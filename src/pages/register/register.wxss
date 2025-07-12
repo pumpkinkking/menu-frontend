@@ -1,0 +1,39 @@
+/* 注册页面样式 */
+.container {
+  padding: 40rpx;
+}
+
+.input-group {
+  margin-bottom: 30rpx;
+}
+
+.input-group input {
+  height: 80rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 32rpx;
+}
+
+.code-container {
+  display: flex;
+  gap: 20rpx;
+}
+
+.code-container input {
+  flex: 1;
+}
+
+.get-code-btn {
+  width: 200rpx;
+  background-color: #f5f5f5;
+  color: #333;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  text-align: center;
+  line-height: 80rpx;
+}
+
+.btn-area {
+  margin-top: 60rpx;
+}

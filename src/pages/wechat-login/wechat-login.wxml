@@ -1,0 +1,11 @@
+<!-- 微信登录页面 -->
+<view class="container">
+  <view class="logo">
+    <image src="/src/static/images/logo.png" mode="aspectFit"></image>
+  </view>
+  <view class="title">欢迎使用菜单小程序</view>
+  <button class="login-btn" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+    微信快捷登录
+  </button>
+  <view class="tips">点击登录即表示同意《用户协议》和《隐私政策》</view>
+</view>

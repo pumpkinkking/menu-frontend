@@ -1,0 +1,30 @@
+<view class="tab-pane">
+  <!-- 内容流区域 -->
+  <view class="content-area">
+    <view class="filter-bar">
+      <view class="filter-item" class="{{activeFilter === 'recommend' ? 'active' : ''}}" bindtap="switchFilter" data-type="recommend">推荐</view>
+      <picker class="filter-picker" bindchange="bindCategoryChange" value="{{categoryIndex}}" range="{{categories}}">
+        <view class="filter-item">{{categories[categoryIndex]}}</view>
+      </picker>
+      <picker class="filter-picker" bindchange="bindMealTimeChange" value="{{mealTimeIndex}}" range="{{mealTimes}}">
+        <view class="filter-item">{{mealTimes[mealTimeIndex]}}</view>
+      </picker>
+      <picker class="filter-picker" bindchange="bindCuisineChange" value="{{cuisineIndex}}" range="{{cuisines}}">
+        <view class="filter-item">{{cuisines[cuisineIndex]}}</view>
+      </picker>
+    </view>
+
+    <view class="recipe-list">
+      <view class="recipe-card" wx:for="{{filteredRecipes}}" wx:key="id">
+        <image class="recipe-img" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="recipe-info">
+          <text class="recipe-title">{{item.title}}</text>
+          <view class="recipe-meta">
+            <text class="meta-item">{{item.time}}</text>
+            <text class="meta-item">{{item.category}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,21 @@
+<view class="plan-container">
+  <view class="section-title">我的饮食计划</view>
+  <view class="empty-state" wx:if="{{plans.length === 0}}">
+    <image src="/static/images/empty-plan.png" class="empty-icon" />
+    <text class="empty-text">暂无计划，快去创建吧</text>
+    <button class="create-btn" bindtap="createNewPlan">+ 创建新计划</button>
+  </view>
+  <view class="plan-list" wx:else>
+    <view class="plan-item" wx:for="{{plans}}" wx:key="id">
+      <view class="plan-info">
+        <text class="plan-title">{{item.title}}</text>
+        <text class="plan-date">{{item.date}}</text>
+      </view>
+      <view class="plan-actions">
+        <button class="edit-btn" bindtap="editPlan" data-id="{{item.id}}">编辑</button>
+        <button class="delete-btn" bindtap="deletePlan" data-id="{{item.id}}">删除</button>
+      </view>
+    </view>
+    <button class="add-btn" bindtap="createNewPlan">+ 添加计划</button>
+  </view>
+</view>

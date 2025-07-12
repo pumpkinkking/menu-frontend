@@ -1,0 +1,23 @@
+<!-- 微信小程序原生弹窗实现 -->
+<view class="modal-mask" wx:if="{{show}}" bindtap="handleCancel"></view>
+<view class="modal-content" wx:if="{{show}}" animation="{{animationData}}">
+  <view class="popup-title">添加菜篮子食材</view>
+  <view class="form-group">
+    <text class="form-label">食材名称*</text>
+    <input value="{{dish.name}}" bindinput="handleNameInput" type="text" class="form-input" placeholder="请输入食材名称" />
+  </view>
+  <view class="form-row">
+    <view class="form-group half">
+      <text class="form-label">数量*</text>
+      <input value="{{dish.quantity}}" bindinput="handleQuantityInput" type="number" class="form-input" min="1" placeholder="请输入数量" />
+    </view>
+    <view class="form-group half">
+      <text class="form-label">单位*</text>
+      <input value="{{dish.unit}}" bindinput="handleUnitInput" type="text" class="form-input" placeholder="个/份/克等" />
+    </view>
+  </view>
+  <view class="button-group">
+    <button class="cancel-btn" bindtap="handleCancel">取消</button>
+    <button class="confirm-btn" bindtap="handleConfirm">确认添加</button>
+  </view>
+</view>

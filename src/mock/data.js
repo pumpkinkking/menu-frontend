@@ -7,6 +7,13 @@ export const recipeCategories = [
   { id: 5, name: '节日特辑', active: false }
 ];
 
+// 计划数据
+ export const plans = [
+  { id: 1, title: '一周减脂计划', date: '2023-10-01', meals: ['早餐：全麦面包+鸡蛋', '午餐：烤鸡胸肉沙拉', '晚餐：清蒸鱼+西兰花'] },
+  { id: 2, title: '家庭聚餐计划', date: '2023-10-05', meals: ['早餐：中式早点', '午餐：火锅', '晚餐：烧烤'] },
+  { id: 3, title: '工作日简餐计划', date: '2023-10-08', meals: ['早餐：燕麦粥+水果', '午餐：三明治', '晚餐：意面'] }
+];
+
 // 菜单分类数据
 export const menuCategories = [
   { id: 1, name: '全部', active: true },

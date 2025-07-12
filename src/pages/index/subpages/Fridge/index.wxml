@@ -1,0 +1,65 @@
+<view class="tab-pane">
+  <view class="content-area">
+    <!-- 冰箱食材内容 -->
+    <view class="ingredients-list">
+      <text class="section-title">冰箱食材</text>
+      <!-- 添加食材按钮 -->
+      <button class="floating-add-btn" bindtap="showAddIngredientDialog">+</button>
+
+      <!-- 添加食材弹窗 -->
+      <view wx:if="{{showAddDialog}}" class="add-ingredient-popup">
+        <view class="popup-title">添加冰箱食材</view>
+        <view class="form-group">
+          <text class="form-label">食材名称*</text>
+          <input value="{{newIngredient.name}}" bindinput="handleNameInput" type="text" class="form-input" placeholder="请输入食材名称" />
+        </view>
+        <view class="form-row">
+          <view class="form-group half">
+            <text class="form-label">数量*</text>
+            <input value="{{newIngredient.quantity}}" bindinput="handleQuantityInput" type="number" class="form-input" min="1" placeholder="请输入数量" />
+          </view>
+          <view class="form-group half">
+            <text class="form-label">单位*</text>
+            <input value="{{newIngredient.unit}}" bindinput="handleUnitInput" type="text" class="form-input" placeholder="个/份/克等" />
+          </view>
+        </view>
+        <view class="form-group">
+          <text class="form-label">存储位置*</text>
+          <picker value="{{newIngredient.location}}" bindchange="handleLocationChange" class="form-picker" range="{{['冷藏', '冷冻', '常温']}}">
+            <view class="picker-display">{{newIngredient.location}}</view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <text class="form-label">新鲜度*</text>
+          <picker value="{{newIngredient.freshness}}" bindchange="handleFreshnessChange" class="form-picker" range="{{['新鲜', '一般', '过期']}}">
+            <view class="picker-display">{{newIngredient.freshness}}</view>
+          </picker>
+        </view>
+        <view class="button-group">
+          <button class="cancel-btn" bindtap="hideAddDialog">取消</button>
+          <button class="confirm-btn" bindtap="submitIngredient">确认添加</button>
+        </view>
+      </view>
+
+      <!-- 食材分类标签 -->
+      <view class="location-tabs">
+        <view class="location-tab" class="{{currentLocation === 'all' ? 'active' : ''}}" bindtap="changeLocation" data-location="all">{{'全部'}}</view>
+        <view class="location-tab" class="{{currentLocation === '冷藏' ? 'active' : ''}}" bindtap="changeLocation" data-location="冷藏">{{'冷藏'}}</view>
+        <view class="location-tab" class="{{currentLocation === '冷冻' ? 'active' : ''}}" bindtap="changeLocation" data-location="冷冻">{{'冷冻'}}</view>
+        <view class="location-tab" class="{{currentLocation === '常温' ? 'active' : ''}}" bindtap="changeLocation" data-location="常温">{{'常温'}}</view>
+      </view>
+
+      <!-- 食材列表 -->
+      <view class="ingredient-item" wx:for="{{filteredIngredients}}" wx:key="id">
+        <view class="ingredient-info">
+          <text class="ingredient-name">{{item.name}}</text>
+          <text class="ingredient-location" wx:if="{{item.location === '常温'}}">{{item.location}}</text>
+        </view>
+        <view class="ingredient-meta">
+          <text class="{{item.quantity <= 5 ? 'low-quantity' : ''}}">{{item.quantity}} {{item.unit}}</text>
+          <text class="{{item.freshnessClass}}">{{item.freshness}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

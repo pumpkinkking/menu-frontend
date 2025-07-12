@@ -1,0 +1,24 @@
+<view class="register-container">
+  <view class="logo">
+    <text class="title">账号注册</text>
+  </view>
+  <form class="register-form">
+    <view class="form-group">
+      <input type="number" bindinput="handlePhoneInput" placeholder="请输入手机号" class="input"/>
+    </view>
+    <view class="form-group code-group">
+      <input type="number" bindinput="handleCodeInput" placeholder="请输入验证码" class="input code-input"/>
+      <button bindtap="getCode" disabled="{{countdown > 0}}" class="code-btn">{{countdown > 0 ? countdown + 's后重新获取' : '获取验证码'}}</button>
+    </view>
+    <view class="form-group">
+      <input type="password" bindinput="handlePasswordInput" placeholder="请设置密码(6-16位)" class="input"/>
+    </view>
+    <view class="form-group">
+      <input type="password" bindinput="handleConfirmPasswordInput" placeholder="请确认密码" class="input"/>
+    </view>
+    <button bindtap="register" class="register-btn">注册</button>
+    <view class="navigate">
+      <navigator url="/pages/login/login" class="login-link">已有账号？去登录</navigator>
+    </view>
+  </form>
+</view>

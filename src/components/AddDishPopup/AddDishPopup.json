@@ -1,0 +1,14 @@
+{
+  "component": true,
+  "properties": {
+    "show": {
+      "type": "Boolean",
+      "value": false,
+      "observer": "_showChange"
+    }
+  },
+  "events": {
+    "close": {},
+    "confirm": {}
+  }
+}

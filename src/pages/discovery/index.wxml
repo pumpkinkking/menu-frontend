@@ -1,0 +1,119 @@
+<view class="discovery-container">
+  <!-- 顶部搜索区 -->
+  <view class="search-container">
+    <view class="search-box">
+      <text class="search-icon"></text>
+      <input type="text" placeholder="搜索菜谱或食材..." class="search-input"/>
+    </view>
+    <button class="filter-btn">筛选</button>
+  </view>
+
+  <!-- 分类导航 -->
+  <scroll-view class="category-scroll" scroll-x>
+    <view class="category-list">
+      <view class="category-item active">全部</view>
+      <view class="category-item">早餐</view>
+      <view class="category-item">午餐</view>
+      <view class="category-item">晚餐</view>
+      <view class="category-item">甜点</view>
+      <view class="category-item">节日专题</view>
+      <view class="category-item">快手菜</view>
+      <view class="category-item">健康低脂</view>
+    </view>
+  </scroll-view>
+
+  <!-- 活动轮播 -->
+  <view class="banner-container">
+    <swiper class="banner-swiper" indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff">
+      <swiper-item>
+        <view class="banner-item" style="background-color: #ff6b6b;">
+          <text class="banner-text">情侣烹饪挑战</text>
+          <text class="banner-subtext">完成3道情侣菜谱赢取浪漫晚餐</text>
+        </view>
+      </swiper-item>
+      <swiper-item>
+        <view class="banner-item" style="background-color: #4ecdc4;">
+          <text class="banner-text">夏日轻食季</text>
+          <text class="banner-subtext">低卡健康菜谱合集</text>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 内容区标题 -->
+  <view class="content-header">
+    <text class="content-title">热门推荐</text>
+    <text class="more-link">更多</text>
+  </view>
+
+  <!-- 双列瀑布流内容区 -->
+  <view class="waterfall-container">
+    <view class="waterfall-column">
+      <!-- 菜谱卡片1 -->
+      <view class="recipe-card">
+        <image class="recipe-img" src="/static/images/recipe1.jpg" mode="aspectFill"></image>
+        <view class="recipe-info">
+          <text class="recipe-title">香煎牛排配红酒酱汁</text>
+          <view class="recipe-meta">
+            <text class="meta-item">难度：中等</text>
+            <text class="meta-item">30分钟</text>
+          </view>
+          <view class="recipe-tags">
+            <text class="tag">情侣浪漫</text>
+            <text class="tag">西餐</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 菜谱卡片3 -->
+      <view class="recipe-card">
+        <image class="recipe-img" src="/static/images/recipe3.jpg" mode="aspectFill"></image>
+        <view class="recipe-info">
+          <text class="recipe-title">草莓奶油蛋糕</text>
+          <view class="recipe-meta">
+            <text class="meta-item">难度：高级</text>
+            <text class="meta-item">90分钟</text>
+          </view>
+          <view class="recipe-tags">
+            <text class="tag">甜点</text>
+            <text class="tag">节日</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="waterfall-column">
+      <!-- 菜谱卡片2 -->
+      <view class="recipe-card">
+        <image class="recipe-img" src="/static/images/recipe2.jpg" mode="aspectFill"></image>
+        <view class="recipe-info">
+          <text class="recipe-title">日式寿喜烧</text>
+          <view class="recipe-meta">
+            <text class="meta-item">难度：简单</text>
+            <text class="meta-item">45分钟</text>
+          </view>
+          <view class="recipe-tags">
+            <text class="tag">火锅</text>
+            <text class="tag">双人份</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 菜谱卡片4 -->
+      <view class="recipe-card">
+        <image class="recipe-img" src="/static/images/recipe4.jpg" mode="aspectFill"></image>
+        <view class="recipe-info">
+          <text class="recipe-title">意式番茄肉酱面</text>
+          <view class="recipe-meta">
+            <text class="meta-item">难度：简单</text>
+            <text class="meta-item">25分钟</text>
+          </view>
+          <view class="recipe-tags">
+            <text class="tag">快手菜</text>
+            <text class="tag">西餐</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,44 @@
+.collaboration-container { display: flex; flex-direction: column; height: 100vh; background-color: #f5f5f5; }
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 16rpx 32rpx; background-color: #fff; border-bottom: 1rpx solid #eee; }
+.title { font-size: 32rpx; font-weight: bold; }
+.new-btn { background-color: #07c160; color: white; padding: 8rpx 16rpx; border-radius: 20rpx; font-size: 28rpx; }
+.layout-container { display: flex; flex: 1; overflow: hidden; }
+.left-panel { width: 30%; background-color: white; border-right: 1rpx solid #eee; overflow-y: auto; }
+.right-panel { flex: 1; padding: 24rpx; overflow-y: auto; }
+.tab-switch { display: flex; border-bottom: 1rpx solid #eee; }
+.tab-item { flex: 1; text-align: center; padding: 16rpx; font-size: 28rpx; color: #666; position: relative; }
+.tab-item.active { color: #07c160; }
+.tab-item.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4rpx; background-color: #07c160; }
+.project-list { padding: 16rpx; }
+.project-item { padding: 16rpx; border-radius: 12rpx; margin-bottom: 12rpx; background-color: #f9f9f9; }
+.project-item.active { background-color: #f0f9f0; border-left: 6rpx solid #07c160; }
+.project-title { font-size: 28rpx; font-weight: bold; display: block; margin-bottom: 4rpx; }
+.project-date { font-size: 22rpx; color: #999; }
+.project-status { display: flex; align-items: center; margin-top: 8rpx; }
+.status-dot { width: 16rpx; height: 16rpx; border-radius: 50%; background-color: #07c160; margin-right: 8rpx; }
+.status-dot.completed { background-color: #999; }
+.status-text { font-size: 24rpx; color: #666; }
+.menu-header { margin-bottom: 32rpx; }
+.menu-title { font-size: 36rpx; font-weight: bold; display: block; margin-bottom: 16rpx; }
+.editor-status { display: flex; align-items: center; color: #666; font-size: 24rpx; }
+.editor-indicator { width: 16rpx; height: 16rpx; border-radius: 50%; display: inline-block; margin-right: 8rpx; margin-left: 16rpx; }
+.editor-indicator.pink { background-color: #ff4d6d; }
+.editor-indicator.blue { background-color: #1890ff; }
+.section-title { font-size: 30rpx; font-weight: bold; margin-bottom: 20rpx; display: block; color: #333; }
+.ingredients-list, .steps-list { background-color: white; border-radius: 16rpx; padding: 24rpx; margin-bottom: 24rpx; }
+.ingredient-item { display: flex; align-items: center; padding: 12rpx 0; border-bottom: 1rpx solid #f5f5f5; }
+.ingredient-item:last-child { border-bottom: none; }
+.checkbox { transform: scale(1.4); margin-right: 20rpx; }
+.ingredient-name { flex: 1; font-size: 28rpx; }
+.ingredient-role { font-size: 24rpx; color: #999; }
+.add-ingredient, .add-step { width: 100%; padding: 16rpx; background-color: #f5f5f5; border-radius: 12rpx; font-size: 28rpx; color: #666; margin-top: 16rpx; }
+.step-item { display: flex; margin-bottom: 24rpx; }
+.step-number { width: 48rpx; height: 48rpx; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 28rpx; margin-right: 20rpx; flex-shrink: 0; }
+.step-number.pink { background-color: #ff4d6d; }
+.step-number.blue { background-color: #1890ff; }
+.step-content { flex: 1; }
+.step-text { font-size: 28rpx; line-height: 44rpx; }
+.step-role { font-size: 24rpx; color: #999; display: block; margin-top: 8rpx; }
+.toolbar { display: flex; justify-content: space-around; padding: 16rpx; background-color: white; border-top: 1rpx solid #eee; }
+.tool-btn { width: 64rpx; height: 64rpx; display: flex; justify-content: center; align-items: center; border-radius: 50%; background-color: #f5f5f5; }
+.save-btn { background-color: #07c160; color: white; padding: 16rpx 32rpx; border-radius: 32rpx; font-size: 28rpx; }

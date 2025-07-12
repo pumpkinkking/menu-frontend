@@ -1,0 +1,33 @@
+<view class="tab-pane">
+  <view class="content-area">
+    <!-- 订单页面内容 -->
+    <view class="order-filters">
+      <view class="filter-item" wx:for="{{orderFilters}}" wx:key="id" class="{{item.active ? 'active' : ''}}" bindtap="handleFilterClick" data-item="{{item}}">
+        {{item.name}}
+      </view>
+    </view>
+
+    <view class="order-list">
+      <view class="order-item" wx:for="{{orders}}" wx:key="id">
+        <view class="order-header">
+          <text class="order-number">订单号: {{item.orderNo}}</text>
+          <text class="order-date">{{item.date}}</text>
+        </view>
+        <view class="order-status">
+          <text class="{{item.status === '待付款' ? 'status-pending' : item.status === '配送中' ? 'status-delivering' : 'status-completed'}}">{{item.status}}</text>
+        </view>
+        <view class="order-details">
+          <view class="dish-info" wx:for="{{item.dishes}}" wx:key="id">
+            <text class="dish-name">{{item.name}} x{{item.quantity}}</text>
+          </view>
+        </view>
+        <view class="order-total">
+          <text class="total-text">总计: ¥{{item.totalPrice}}</text>
+          <view class="pay-btn" wx:if="{{item.status === '待付款'}}" bindtap="payOrder" data-order-id="{{item.id}}">
+            <text class="btn-text">去支付</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

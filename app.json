@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "src/pages/wechat-login/wechat-login",
+    "src/pages/login/login",
+    "src/pages/register/register",
+    "src/pages/index/index",
+    "src/pages/plan/plan",
+    "src/pages/discovery/discovery",
+    "src/pages/profile/profile",
+    "src/pages/basket/index"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#f5f9ff"
+  },
+  "subPackages": [
+    {
+      "root": "src/pages/collaboration",
+      "pages": ["index"]
+    }
+  ],
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#ff6b6b",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "src/pages/plan/plan",
+        "text": "计划",
+        "iconPath": "src/static/icon/plan_active.png",
+        "selectedIconPath": "src/static/icon/plan_active.png"
+      },
+      {
+        "pagePath": "src/pages/index/index",
+        "text": "主页",
+        "iconPath": "src/static/icon/home_active.png",
+        "selectedIconPath": "src/static/icon/home_active.png"
+      },
+      {
+        "pagePath": "src/pages/profile/profile",
+        "text": "我的",
+        "iconPath": "src/static/icon/profile_active.png",
+        "selectedIconPath": "src/static/icon/profile_active.png"
+      }
+    ],
+    "selectedIndex": 0
+  }
+}

@@ -1,0 +1,27 @@
+<view class="basket-container">
+  <!-- 悬浮添加按钮 -->
+  <button class="floating-add-btn" bindtap="showAddDialog">+</button>
+  
+  <!-- 新添加菜品弹窗 -->
+  <add-dish-popup
+    show="{{showAddDialog}}"
+    bind:close="hideAddDialog"
+    bind:confirm="handleAddIngredient"
+  ></add-dish-popup>
+
+  <!-- 菜篮子列表 -->
+  <view class="basket-list">
+    <view class="section-title">我的购物清单 ({{basketItems.length}})</view>
+    <view wx:if="{{basketItems.length === 0}}" class="empty-state">
+      <image src="/static/images/empty-basket.png" class="empty-icon" />
+      <text class="empty-text">购物清单为空</text>
+    </view>
+    <view class="basket-item" wx:for="{{basketItems}}" wx:key="id">
+      <view class="item-info">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-quantity">{{item.quantity}} {{item.unit}}</text>
+      </view>
+      <button bindtap="removeIngredient" data-index="{{index}}" class="remove-btn">删除</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,146 @@
+<view class="home-container">
+  <!-- 顶部区域 -->
+  <view class="top-area">
+    <view class="stats-cards">
+      <view class="stat-card" wx:for="{{statsData}}" wx:key="index">
+        <text class="stat-value">{{item.value}}</text>
+        <text class="stat-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 中部功能区 - Tab导航 -->
+  <view class="tab-container">
+    <!-- Tab导航栏 -->
+    <view class="tab-bar">
+      <view class="tab-item" wx:for="{{tabs}}" wx:key="index" bindtap="handleTabClick" data-tab="{{item}}">
+        <text class="tab-text">{{item.name}}</text>
+      </view>
+    </view>
+
+    <!-- 内容区域 -->
+    <view class="tab-content">
+      <!-- 厨房Tab -->
+      <view wx:if="{{currentTab === 0}}">
+        <view class="ingredients-list">
+          <view class="ingredient-item" wx:for="{{ingredients}}" wx:key="id">
+            <image class="ingredient-img" src="{{item.image}}" mode="aspectFit"></image>
+            <view class="ingredient-info">
+              <text class="ingredient-name">{{item.name}}</text>
+              <text class="ingredient-quantity">{{item.quantity}}{{item.unit}}</text>
+            </view>
+            <button class="edit-btn" bindtap="editIngredient" data-id="{{item.id}}">编辑</button>
+          </view>
+          <button class="add-ingredient-btn" bindtap="handleAddIngredient">+ 添加食材</button>
+        </view>
+      </view>
+
+      <!-- 点菜Tab -->
+      <view wx:if="{{currentTab === 1}}">
+        <scroll-view class="category-scroll" scroll-x>
+          <view class="category-list">
+            <view class="category-item" wx:for="{{menuCategories}}" wx:key="id" bindtap="handleCategoryClick" data-category="{{item}}" data-type="menuCategories">
+              <text class="category-name">{{item.name}}</text>
+            </view>
+          </view>
+        </scroll-view>
+        <view class="menu-list">
+          <view class="menu-item" wx:for="{{menuItems}}" wx:key="id">
+            <image class="menu-img" src="{{item.image}}" mode="aspectFill"></image>
+            <view class="menu-info">
+              <text class="menu-title">{{item.name}}</text>
+              <text class="menu-price">¥{{item.price}}</text>
+              <text class="menu-desc">{{item.desc}}</text>
+            </view>
+            <button class="add-to-cart-btn" bindtap="addToCart" data-item="{{item}}">加入购物车</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 订单Tab -->
+      <view wx:if="{{currentTab === 2}}">
+        <view class="filter-list">
+          <view class="filter-item" wx:for="{{orderFilters}}" wx:key="id" bindtap="handleFilterClick" data-filter="{{item}}">
+            <text class="filter-name">{{item.name}}</text>
+          </view>
+        </view>
+        <view class="order-list">
+          <view class="order-item" wx:for="{{orders}}" wx:key="id">
+            <view class="order-header">
+              <text class="order-number">订单号: {{item.orderNo}}</text>
+              <text class="order-status">{{item.status}}</text>
+            </view>
+            <view class="order-items" wx:for="{{item.items}}" wx:key="id" wx:for-item="orderItem">
+              <text class="order-item-name">{{orderItem.name}} x{{orderItem.quantity}}</text>
+            </view>
+            <view class="order-footer">
+              <text class="order-total">总计: ¥{{item.total}}</text>
+              <button class="pay-btn" bindtap="payOrder" data-id="{{item.id}}">支付</button>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 商店Tab -->
+      <view wx:if="{{currentTab === 3}}">
+        <scroll-view class="category-scroll" scroll-x>
+          <view class="category-list">
+            <view class="category-item" wx:for="{{productCategories}}" wx:key="id" bindtap="handleCategoryClick" data-category="{{item}}" data-type="productCategories">
+              <text class="category-name">{{item.name}}</text>
+            </view>
+          </view>
+        </scroll-view>
+        <view class="product-list">
+          <view class="product-item" wx:for="{{products}}" wx:key="id">
+            <image class="product-img" src="{{item.image}}" mode="aspectFill"></image>
+            <view class="product-info">
+              <text class="product-title">{{item.name}}</text>
+              <text class="product-price">¥{{item.price}}</text>
+              <text class="product-spec">{{item.spec}}</text>
+            </view>
+            <button class="add-to-cart-btn" bindtap="addToCart" data-item="{{item}}">加入购物车</button>
+          </view>
+        </view>
+      </view>
+
+      <!-- 菜谱广场Tab -->
+      <view wx:if="{{currentTab === 4}}">
+        <scroll-view class="category-scroll" scroll-x>
+          <view class="category-list">
+            <view class="category-item" wx:for="{{recipeCategories}}" wx:key="id" bindtap="handleCategoryClick" data-category="{{item}}" data-type="recipeCategories">
+              <text class="category-name">{{item.name}}</text>
+            </view>
+          </view>
+        </scroll-view>
+        <view class="recipe-grid">
+          <view class="recipe-card" wx:for="{{recipes}}" wx:key="id">
+            <image class="recipe-img" src="{{item.image}}" mode="aspectFill"></image>
+            <text class="recipe-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 菜篮子Tab -->
+      <view wx:if="{{currentTab === 5}}">
+        <view class="basket-list">
+          <view class="basket-item" wx:for="{{basketItems}}" wx:key="id">
+            <image class="basket-img" src="{{item.image}}" mode="aspectFill"></image>
+            <view class="basket-info">
+              <text class="basket-title">{{item.name}}</text>
+              <text class="basket-price">¥{{item.price}}</text>
+            </view>
+            <view class="basket-quantity">
+              <button class="minus-btn" bindtap="decreaseQuantity" data-id="{{item.id}}">-</button>
+              <text class="quantity">{{item.quantity}}</text>
+              <button class="plus-btn" bindtap="increaseQuantity" data-id="{{item.id}}">+</button>
+            </view>
+          </view>
+        </view>
+        <view class="basket-footer">
+          <text class="total-price">总计: ¥{{totalPrice}}</text>
+          <button class="checkout-btn" bindtap="goToCheckout">结算</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

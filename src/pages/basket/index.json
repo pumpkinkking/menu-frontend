@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "我的购物篮",
+  "usingComponents": {
+    "add-dish-popup": "/src/components/AddDishPopup/AddDishPopup"
+  }
+}

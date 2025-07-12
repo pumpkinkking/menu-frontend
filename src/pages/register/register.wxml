@@ -1,0 +1,25 @@
+<view class="register-container">
+  <view class="logo">
+    <image src="/static/logo.png" class="logo-img" />
+  </view>
+  <view class="form-group">
+    <text class="form-label">手机号</text>
+    <input type="number" placeholder="请输入手机号" class="form-input" bindinput="handlePhoneInput" />
+  </view>
+  <view class="form-group">
+    <text class="form-label">验证码</text>
+    <view class="code-input-group">
+      <input type="number" placeholder="请输入验证码" class="form-input code-input" bindinput="handleCodeInput" />
+      <button class="get-code-btn" bindtap="getVerificationCode">{{countdown > 0 ? countdown + 's后重新获取' : '获取验证码'}}</button>
+    </view>
+  </view>
+  <view class="form-group">
+    <text class="form-label">设置密码</text>
+    <input type="password" placeholder="请设置密码" class="form-input" bindinput="handlePasswordInput" />
+  </view>
+  <button class="register-btn" bindtap="register">注册</button>
+  <view class="navigate-login">
+    <text>已有账号？</text>
+    <text class="login-link" bindtap="navigateToLogin">立即登录</text>
+  </view>
+</view>

@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "add-dish-popup": "/src/components/AddDishPopup/AddDishPopup"
+  }
+}

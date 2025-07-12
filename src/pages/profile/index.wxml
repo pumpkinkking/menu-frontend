@@ -1,0 +1,33 @@
+<view class="profile-container">
+  <!-- 顶部个人信息区 -->
+  <view class="top-profile">
+    <view class="profile-header">
+      <view class="avatar-container">
+        <image class="avatar" src="{{userInfo.avatarUrls.you}}"></image>
+        <image class="avatar couple" src="{{userInfo.avatarUrls.partner}}"></image>
+      </view>
+      <view class="profile-info">
+        <text class="couple-name">{{userInfo.coupleName}}</text>
+        <text class="love-level">爱情等级 Lv.{{userInfo.loveLevel}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 中部情侣数据看板 -->
+  <view class="stats-board">
+    <view class="stat-item" wx:for="{{stats}}" wx:key="id">
+      <text class="stat-value">{{item.value}}</text>
+      <text class="stat-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 底部功能菜单 -->
+  <view class="function-menu">
+    <view class="menu-section" wx:for="{{menuSections}}" wx:key="id">
+      <view class="menu-item" wx:for="{{item.items}}" wx:key="id" bindtap="navigateTo" data-path="{{item.path}}">
+        <image class="menu-icon" src="{{item.icon}}"></image>
+        <text class="menu-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+</view>

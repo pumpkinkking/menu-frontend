@@ -1,0 +1,60 @@
+<view class="tab-pane">
+  <view class="content-area">
+    <!-- 商店页面内容 -->
+    <scroll-view class="category-scroll" scroll-x>
+      <view class="category-list">
+        <view class="category-item" wx:for="{{productCategories}}" wx:key="id" class="{{item.active ? 'active' : ''}}" bindtap="handleCategoryClick" data-item="{{item}}">
+          {{item.name}}
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="product-list">
+      <view class="product-item" wx:for="{{products}}" wx:key="id">
+        <image class="product-img" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="product-info">
+          <text class="product-title">{{item.name}}</text>
+          <text class="product-spec">{{item.spec}}</text>
+          <view class="product-price">
+            <text class="price">¥{{item.price}}</text>
+            <view class="add-btn" bindtap="addToCart" data-item="{{item}}">
+              <text class="btn-text">+</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 悬浮添加按钮 -->
+  <button class="floating-add-btn" bindtap="showAddRewardDialog = true">+
+  </button>
+
+  <!-- 添加奖励子页面/模态框 -->
+  <view class="reward-modal" wx:if="{{showAddRewardDialog}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">添加自定义奖励</text>
+        <button class="close-btn" bindtap="showAddRewardDialog = false">×</button>
+      </view>
+      <view class="modal-body">
+        <view class="form-group">
+          <text class="label">奖励名称</text>
+          <input type="text" bindinput="handleRewardNameInput" placeholder="输入奖励名称" class="input"/>
+        </view>
+        <view class="form-group">
+          <text class="label">积分数量</text>
+          <input type="number" bindinput="handleRewardPointsInput" placeholder="输入所需积分" class="input"/>
+        </view>
+        <view class="form-group">
+          <text class="label">奖励描述</text>
+          <textarea bindinput="handleRewardDescInput" placeholder="输入奖励描述" class="textarea"></textarea>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="cancel-btn" bindtap="showAddRewardDialog = false">取消</button>
+        <button class="confirm-btn" bindtap="addReward">确认添加</button>
+      </view>
+    </view>
+  </view>
+</view>
