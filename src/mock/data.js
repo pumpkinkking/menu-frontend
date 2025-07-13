@@ -1,4 +1,69 @@
 // 菜谱分类数据
+// 建议箱相关模拟数据
+let suggestions = [];
+
+export const submitSuggestion = (data) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      suggestions.push({
+        id: Date.now(),
+        ...data
+      });
+      resolve({ success: true, message: '建议提交成功' });
+    }, 500);
+  });
+};
+
+// 捐赠相关模拟数据
+let donors = [
+  { id: 1, name: '爱心用户A', amount: 50 },
+  { id: 2, name: '匿名支持者', amount: 20 },
+  { id: 3, name: '热心网友B', amount: 100 }
+];
+
+export const getMenuList = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        success: true,
+        data: [
+          { id: 1, name: '宫保鸡丁', imageUrl: '/static/images/menu1.jpg', ingredients: ['鸡肉', '花生米', '干辣椒'] },
+          { id: 2, name: '鱼香肉丝', imageUrl: '/static/images/menu2.jpg', ingredients: ['猪肉', '胡萝卜', '青椒'] },
+          { id: 3, name: '麻婆豆腐', imageUrl: '/static/images/menu3.jpg', ingredients: ['豆腐', '牛肉末', '豆瓣酱'] },
+          { id: 4, name: '糖醋排骨', imageUrl: '/static/images/menu4.jpg', ingredients: ['排骨', '白糖', '醋'] },
+          { id: 5, name: '西红柿鸡蛋', imageUrl: '/static/images/menu5.jpg', ingredients: ['西红柿', '鸡蛋', '葱'] },
+          { id: 6, name: '青椒土豆丝', imageUrl: '/static/images/menu6.jpg', ingredients: ['青椒', '土豆', '醋'] },
+          { id: 7, name: '红烧肉', imageUrl: '/static/images/menu7.jpg', ingredients: ['五花肉', '酱油', '糖'] },
+          { id: 8, name: '水煮鱼', imageUrl: '/static/images/menu8.jpg', ingredients: ['鱼', '豆芽', '辣椒'] }
+        ]
+      });
+    }, 300);
+  });
+};
+
+export const submitDonation = (params) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      donors.push({
+        id: Date.now(),
+        name: data.userName || '匿名用户',
+        amount: data.amount
+      });
+      resolve({ success: true, message: '打赏成功' });
+    }, 500);
+  });
+};
+
+export const getDonorList = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // 按金额降序排序，取前20条
+      const sortedDonors = [...donors].sort((a, b) => b.amount - a.amount).slice(0, 20);
+      resolve({ success: true, data: sortedDonors });
+    }, 300);
+  });
+};
+
 export const recipeCategories = [
   { id: 1, name: '推荐', active: true },
   { id: 2, name: '本周流行', active: false },

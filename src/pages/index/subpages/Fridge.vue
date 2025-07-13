@@ -7,44 +7,7 @@
         <!-- 添加食材按钮 -->
         <button class="floating-add-btn" @click="showAddIngredientDialog">+</button>
 
-        <!-- 添加食材弹窗 -->
-        <uni-popup v-model="showAddDialog" type="bottom" :mask-click="false">
-          <view class="add-ingredient-popup">
-            <view class="popup-title">添加冰箱食材</view>
-            <view class="form-group">
-              <text class="form-label">食材名称*</text>
-              <input v-model="newIngredient.name" type="text" class="form-input" placeholder="请输入食材名称" />
-            </view>
-            <view class="form-row">
-              <view class="form-group half">
-                <text class="form-label">数量*</text>
-                <input v-model.number="newIngredient.quantity" type="number" class="form-input" min="1" placeholder="请输入数量" />
-              </view>
-              <view class="form-group half">
-                <text class="form-label">单位*</text>
-                <input v-model="newIngredient.unit" type="text" class="form-input" placeholder="个/份/克等" />
-              </view>
-            </view>
-            <view class="form-group">
-              <text class="form-label">存储位置*</text>
-              <picker v-model="newIngredient.location" class="form-picker" :range="['冷藏', '冷冻', '常温']">
-                <view class="picker-display">{{ newIngredient.location }}</view>
-              </picker>
-            </view>
-            <view class="form-group">
-              <text class="form-label">新鲜度*</text>
-              <picker v-model="newIngredient.freshness" class="form-picker" :range="['新鲜', '一般', '过期']">
-                <view class="picker-display">{{ newIngredient.freshness }}</view>
-              </picker>
-            </view>
-            <view class="button-group">
-              <button class="cancel-btn" @click="showAddDialog = false">取消</button>
-              <button class="confirm-btn" @click="submitIngredient">确认添加</button>
-            </view>
-          </view>
-        </uni-popup>
-
-        <!-- 食材分类标签 -->
+                <!-- 食材分类标签 -->
         <view class="location-tabs">
           <view class="location-tab" :class="currentLocation === 'all' ? 'active' : ''" @click="currentLocation = 'all'">{{ '全部' }}</view>
           <view class="location-tab" :class="currentLocation === '冷藏' ? 'active' : ''" @click="currentLocation = '冷藏'">{{ '冷藏' }}</view>
@@ -53,6 +16,11 @@
         </view>
 
         <!-- 食材列表 -->
+        <AddIngredientForm
+          :visible="showAddForm"
+          @close="showAddForm = false"
+          @submit="handleAddIngredient"
+        />
         <view class="ingredient-item" v-for="ingredient in filteredIngredients" :key="ingredient.id">
           <view class="ingredient-info">
             <text class="ingredient-name">{{ ingredient.name }}</text>
@@ -60,7 +28,7 @@
           </view>
           <view class="ingredient-meta">
             <text :class="ingredient.quantity <= 5 ? 'low-quantity' : ''">{{ ingredient.quantity }} {{ ingredient.unit }}</text>
-            <text :class="getFreshnessClass(ingredient.freshness)">{{ ingredient.freshness }}</text>
+            <text :class="freshnessClasses[ingredient.freshness]">{{ ingredient.freshness }}</text>
           </view>
         </view>
       </view>
@@ -69,11 +37,17 @@
 </template>
 
 <script>
+import AddIngredientForm from '@/components/AddIngredientForm.vue';
+import ingredientApi from '@/api/ingredient';
 /**
  * 冰箱Tab组件
  * 展示冰箱内食材信息，包括存储位置和新鲜状态
  */
 export default {
+  components: {
+    AddIngredientForm
+  },
+
   props: {
     ingredients: {
       type: Array,
@@ -84,14 +58,24 @@ export default {
   data() {
     return {
         currentLocation: 'all', // all, 冷藏, 冷冻, 常温
-        showAddDialog: false,
-        newIngredient: {
+      showAddForm: false,
+      newIngredient: {
           name: '',
-          quantity: 1,
-          unit: '个',
-          location: '冷藏',
-          freshness: '新鲜'
-        }
+        category: '',
+        productionDate: '',
+        shelfLife: '',
+        quantity: 1,
+        unit: '个',
+        location: '冷藏',
+        freshness: '新鲜',
+        notes: ''
+        },
+      // 新鲜度样式映射
+      freshnessClasses: {
+        '新鲜': 'fresh',
+        '一般': 'normal',
+        '过期': 'expired'
+      }
       };
   },
   computed: {
@@ -124,19 +108,51 @@ export default {
       }
     },
     /**
-     * 显示添加食材对话框
+     * 显示添加食材对话框(微信原生)
      */
+    // 跳转到添加食材表单页面
     showAddIngredientDialog() {
-      // 重置表单
-      this.newIngredient = {
-        name: '',
-        quantity: 1,
-        unit: '个',
-        location: '冷藏',
-        freshness: '新鲜'
-      };
-      this.showAddDialog = true;
+      this.showAddForm = true;
     },
+
+    /**
+     * 处理添加新食材
+     */
+    handleAddIngredient(newIngredient) {
+      // 验证食材数据
+      if (!newIngredient.name || !newIngredient.quantity) {
+        uni.showToast({ title: '食材信息不完整', icon: 'none' });
+        return;
+      }
+
+      // 调用API添加食材
+      ingredientApi.addIngredient(newIngredient)
+        .then(response => {
+          uni.showToast({ title: '食材添加成功', icon: 'success' });
+          // 通知父组件刷新食材列表
+          this.$emit('refresh-ingredients');
+          this.showAddForm = false;
+        })
+        .catch(error => {
+          uni.showToast({ title: '食材添加失败', icon: 'error' });
+          console.error('Failed to add ingredient:', error);
+        });
+    },
+
+    // 监听添加食材事件
+    onLoad() {
+      uni.$on('addIngredient', this.handleAddIngredient);
+    },
+
+    // 页面卸载时移除事件监听
+    onUnload() {
+      uni.$off('addIngredient', this.handleAddIngredient);
+    },
+    
+    /**
+     * 弹窗输入食材名称
+     */
+
     /**
      * 提交新食材
      */
@@ -151,8 +167,14 @@ export default {
         ? Math.max(...this.ingredients.map(item => item.id)) + 1 
         : 1;
       
+      // 计算过期日期
+      const production = new Date(this.newIngredient.productionDate);
+      const expiryDate = new Date(production);
+      expiryDate.setDate(production.getDate() + this.newIngredient.shelfLife);
+      
       const newItem = {
         id: newId,
+        expiryDate: expiryDate.toISOString().split('T')[0],
         ...this.newIngredient
       };
       
@@ -273,89 +295,4 @@ export default {
   font-size: 12px;
 }
 
-/* 添加食材弹窗样式 */
-.add-ingredient-popup {
-  background-color: #fff;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  padding: 20px;
-}
-
-.popup-title {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-row {
-  display: flex;
-  gap: 10px;
-}
-
-.half {
-  flex: 1;
-}
-
-.form-label {
-  display: block;
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 6px;
-}
-
-.form-input {
-  width: 100%;
-  height: 40px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 0 12px;
-  font-size: 14px;
-}
-
-.form-picker {
-  width: 100%;
-  height: 40px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 0 12px;
-  display: flex;
-  align-items: center;
-}
-
-.picker-display {
-  font-size: 14px;
-  color: #333;
-  flex: 1;
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.cancel-btn, .confirm-btn {
-  flex: 1;
-  height: 44px;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-.cancel-btn {
-  background-color: #f5f5f5;
-  color: #333;
-  border: none;
-}
-
-.confirm-btn {
-  background-color: #ff85a2;
-  color: white;
-  border: none;
-}
 </style>

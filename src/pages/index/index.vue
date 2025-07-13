@@ -47,7 +47,10 @@
 </template>
 
 <script>
-import { recipeCategories, menuCategories, productCategories, orderFilters, recipes, ingredients, menuItems, orders, products, statsData, tabs } from '@/mock/data';
+import orderApi from '@/api/order';
+import * as menuApi from '@/api/menu';
+import ingredientApi from '@/api/ingredient';
+import { tabs, orderFilters } from '@/mock/data';
 import Fridge from './subpages/Fridge.vue';
 import Menu from './subpages/Menu.vue';
 import Order from './subpages/Order.vue';
@@ -66,21 +69,66 @@ export default {
   data() {
     return {
       currentTab: 0, // 当前选中的Tab索引，默认厨房
-      recipeCategories,
-      menuCategories,
-      productCategories,
+      recipeCategories: [],
+      menuCategories: [],
+      productCategories: [],
       orderFilters,
-      recipes,
-      ingredients,
-      menuItems,
-      orders,
-      products,
-      statsData,
+      recipes: [],
+      ingredients: [],
+      menuItems: [],
+      orders: [],
+      products: [],
+      statsData: [],
       tabs,
       basketItems: []
     };
   },
+  mounted() {
+    // 页面加载时获取订单、食材和菜谱数据
+    this.loadOrders();
+    this.loadIngredients();
+    this.loadRecipes();
+  },
   methods: {
+      /**
+       * 从API加载订单数据
+       */
+      loadOrders() {
+      orderApi.getOrders()
+        .then(response => {
+          this.orders = response.data;
+        })
+        .catch(error => {
+          uni.showToast({ title: '订单数据加载失败', icon: 'error' });
+          console.error('Failed to load orders:', error);
+        });
+    },
+    /**
+     * 从API加载食材数据
+     */
+    loadIngredients() {
+      ingredientApi.getIngredients()
+        .then(response => {
+          this.ingredients = response.data;
+        })
+        .catch(error => {
+          uni.showToast({ title: '食材数据加载失败', icon: 'error' });
+          console.error('Failed to load ingredients:', error);
+        });
+    },
+    /**
+     * 从API加载菜谱数据
+     */
+    loadRecipes() {
+      menuApi.searchMenus()
+        .then(response => {
+          this.recipes = response.data;
+        })
+        .catch(error => {
+          uni.showToast({ title: '菜谱数据加载失败', icon: 'error' });
+          console.error('Failed to load recipes:', error);
+        });
+    },
       // 处理分类点击事件
       handleCategoryClick(category) {
         // 重置同类型所有分类的active状态

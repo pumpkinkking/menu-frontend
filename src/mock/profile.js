@@ -29,19 +29,19 @@
           id: 'fridge',
           icon: '/static/icon/ideabox.png',
           name: '建议箱',
-          path: '/pages/profile/components/ideabox'
+          path: '/pages/profile/SuggestionBox'
         },
         {
           id: 'collection',
           icon: '/static/icon/feed.png',
           name: '投喂',
-          path: '/pages/profile/components/feed'
+          path: '/pages/profile/DonatePage'
         },
         {
           id: 'task',
           icon: '/static/icon/aboutus.png',
           name: '关于我们',
-          path: '/pages/profile/components/aboutus'
+          path: '/pages/profile/AboutUs'
         }
       ]
     }

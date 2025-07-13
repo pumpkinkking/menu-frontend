@@ -1,14 +1,15 @@
 <template>
   <view class="basket-container">
     <!-- 悬浮添加按钮 -->
-    <button class="floating-add-btn" @click="showAddIngredientDialog">+</button>
+    <button class="floating-add-btn" @click="showAddForm">+</button>
+    <!-- 添加食材表单弹窗 -->
+    <AddToBasketForm
+      :visible="showAddFormDialog"
+      @close="closeAddForm"
+      @submit="handleFormSubmit"
+    ></AddToBasketForm>
 
-    <!-- 引入食材弹窗组件 -->
-    <add-ingredient-popup
-      :ref="addIngredientPopup"
-    ></add-ingredient-popup>
-
-    <!-- 菜篮子列表 -->
+        <!-- 菜篮子列表 -->
     <view class="basket-list">
       <view class="section-title">我的购物清单 ({{ basketItems.length }})</view>
       <view v-if="basketItems.length === 0" class="empty-state">
@@ -28,15 +29,16 @@
 </template>
 
 <script>
+import AddToBasketForm from '@/components/AddToBasketForm.vue';
+
 /**
  * 菜篮子组件 - 用于管理需要购买的食材
  * 功能包括：手动添加食材、从菜品一键添加食材、删除食材
  */
-import AddIngredientPopup from '../../../components/AddIngredientPopup.vue';
 
 export default {
   components: {
-    AddIngredientPopup
+    AddToBasketForm
   },
   props: {
     // 从父组件接收菜单数据
@@ -54,52 +56,124 @@ export default {
       },
       // 菜品弹窗显示状态
       showDishes: false,
-      // 添加食材弹窗显示状态
-      showAddDialog: false
-    };
+      // 添加食材表单弹窗显示状态
+      showAddFormDialog: false
+      };
   },
   methods: {
     /**
-     * 显示添加食材对话框
+     * 显示添加食材表单
+     */
+    showAddForm() {
+      this.showAddFormDialog = true;
+    },
+    /**
+     * 关闭添加食材表单
+     */
+    closeAddForm() {
+      this.showAddFormDialog = false;
+    },
+    /**
+     * 处理表单提交
+     */
+    handleFormSubmit(formData) {
+      // 检查是否已存在同名食材
+      const existingIndex = this.basketItems.findIndex(
+        item => item.name === formData.name
+      );
+      
+      if (existingIndex > -1) {
+        // 如果已存在，增加数量
+        this.basketItems[existingIndex].quantity += (formData.quantity || 1);
+      } else {
+        // 如果不存在，添加新食材
+        this.basketItems.push({
+          name: formData.name,
+          quantity: formData.quantity || 1,
+          unit: formData.unit || '份',
+          notes: formData.notes || ''
+        });
+      }
+      
+      uni.showToast({ title: '添加成功', icon: 'success' });
+      this.closeAddForm();
+    },
+    /**
+     * 显示添加食材表单
+     */
+    showAddForm() {
+      this.showAddFormDialog = true;
+    },
+    /**
+     * 关闭添加食材表单
+     */
+    closeAddForm() {
+      this.showAddFormDialog = false;
+    },
+    /**
+     * 处理表单提交
+     */
+    handleFormSubmit(formData) {
+      // 检查是否已存在同名食材
+      const existingIndex = this.basketItems.findIndex(
+        item => item.name === formData.name
+      );
+      
+      if (existingIndex > -1) {
+        // 如果已存在，增加数量
+        this.basketItems[existingIndex].quantity += (formData.quantity || 1);
+      } else {
+        // 如果不存在，添加新食材
+        this.basketItems.push({
+          name: formData.name,
+          quantity: formData.quantity || 1,
+          unit: formData.unit || '份',
+          notes: formData.notes || ''
+        });
+      }
+      
+      uni.showToast({ title: '添加成功', icon: 'success' });
+      this.closeAddForm();
+    },
+    /**
+     * 显示添加食材对话框(微信原生)
      */
     showAddIngredientDialog() {
-      this.newIngredient = {
-        name: '',
-        quantity: 1,
-        unit: '份'
-      };
-      this.showAddDialog = true;
+      wx.showModal({
+        title: '添加食材',
+        editable: true,
+        placeholderText: '请输入食材名称',
+        success: (res) => {
+          if (res.confirm && res.content.trim()) {
+            this.newIngredient = {
+              name: res.content.trim(),
+              quantity: 1,
+              unit: '份'
+            };
+            this.handleAddIngredient();
+          }
+        }
+      });
     },
 
     /**
-     * 手动添加食材到菜篮子
+     * 处理添加食材到菜篮子
      */
-    /**
-     * 处理从弹窗组件确认添加食材
-     * @param {Object} ingredient - 从弹窗接收的食材数据
-     */
-    handleAddIngredient(ingredient) {
-      if (!this.newIngredient.name.trim()) {
-        uni.showToast({ title: '请输入食材名称', icon: 'none' });
-        return;
-      }
-      
+    handleAddIngredient() {
       // 检查是否已存在同名食材
       const existingIndex = this.basketItems.findIndex(
         item => item.name === this.newIngredient.name
       );
       
       if (existingIndex > -1) {
-          // 如果已存在，增加数量
-          this.basketItems[existingIndex].quantity += ingredient.quantity;
-        } else {
-          // 如果不存在，添加新食材
-          this.basketItems.push({ ...ingredient });
-        }
+        // 如果已存在，增加数量
+        this.basketItems[existingIndex].quantity += this.newIngredient.quantity;
+      } else {
+        // 如果不存在，添加新食材
+        this.basketItems.push({ ...this.newIngredient });
+      }
       
-      // 重置输入框
       uni.showToast({ title: '添加成功', icon: 'success' });
-        this.showAddDialog = false;
     },
     
     /**
@@ -147,7 +221,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang = "scss" scoped>
 .basket-container {
   padding: 16px;
 }
@@ -174,7 +248,7 @@ export default {
 .add-btn {
   width: 80px;
   height: 40px;
-  background-color: #ff85a2;
+  background-color: $uni-color-primary;
   color: white;
   border: none;
   border-radius: 8px;
@@ -303,7 +377,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 12px;
-  background-color: #f9f9f9;
+  background-color: $uni-bg-color;
   border-radius: 8px;
   margin-bottom: 8px;
 }

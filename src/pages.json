@@ -41,7 +41,24 @@
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
-		}
+		},    {
+      "path": "pages/profile/SuggestionBox",
+      "style": {
+        "navigationBarTitleText": "建议箱"
+      }
+    },
+    {
+      "path": "pages/profile/DonatePage",
+      "style": {
+        "navigationBarTitleText": "支持作者"
+      }
+    },
+    {
+      "path": "pages/profile/AboutUs",
+      "style": {
+        "navigationBarTitleText": "关于我们"
+      }
+    }
 	],
 	"globalStyle": {
 		"navigationStyle": "custom",
