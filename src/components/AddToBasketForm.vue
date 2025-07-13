@@ -182,7 +182,7 @@ export default {
 };
 </script>
 
-<style lang = "scss" scoped>
+<style scoped>
 .basket-popup {
   position: fixed;
   top: 0;

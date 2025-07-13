@@ -221,7 +221,7 @@ export default {
 };
 </script>
 
-<style lang = "scss" scoped>
+<style scoped>
 .basket-container {
   padding: 16px;
 }
