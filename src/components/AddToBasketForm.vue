@@ -240,7 +240,7 @@ export default {
 }
 
 .switch-bar button.active {
-  background-color: $uni-color-primary;
+  background-color: var(--uni-color-primary);
   color: #fff;
 }
 
@@ -269,7 +269,7 @@ export default {
 .form-input {
   width: 100%;
   padding: 15rpx;
-  border: 2rpx solid $uni-bg-color-grey;
+  border: 2rpx solid var(--uni-bg-color-grey);
   border-radius: 8rpx;
   font-size: 28rpx;
   box-sizing: border-box;
@@ -323,7 +323,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 15rpx 0;
-  border-bottom: 2rpx solid $uni-bg-color-grey;
+  border-bottom: 2rpx solid var(--uni-bg-color-grey);
 }
 
 .menu-image {

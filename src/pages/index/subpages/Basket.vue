@@ -248,7 +248,7 @@ export default {
 .add-btn {
   width: 80px;
   height: 40px;
-  background-color: $uni-color-primary;
+  background-color: var(--uni-color-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -377,7 +377,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 12px;
-  background-color: $uni-bg-color;
+  background-color: var(--uni-bg-color);
   border-radius: 8px;
   margin-bottom: 8px;
 }

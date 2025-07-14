@@ -98,7 +98,7 @@ export default {
 };
 </script>
 
-<style lang = "scss" scoped>
+<style scoped>
 .add-ingredient-popup {
   background-color: #fff;
   border-radius: 16px 16px 0 0;
@@ -126,7 +126,7 @@ export default {
 .form-input {
   width: 100%;
   height: 44px;
-  border: 1px solid $uni-bg-color-grey;
+  border: 1px solid var(--uni-bg-color-grey);
   border-radius: 8px;
   padding: 0 12px;
   font-size: 14px;
@@ -156,12 +156,12 @@ export default {
 }
 
 .cancel-btn {
-  background-color: $uni-bg-color-grey;
+  background-color: var(--uni-bg-color-grey);
   color: #666;
 }
 
 .confirm-btn {
-  background-color: $uni-color-primary;
+  background-color: var(--uni-color-primary);
   color: white;
 }
 </style>
