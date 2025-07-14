@@ -13,16 +13,16 @@ const orderApi = {
    * @returns {Promise<number>} - 订单ID
    */
   createOrder: (orderDTO) => {
-    return request.post('/orders', orderDTO);
-  },
+    return request.post('/orders/createOrder', orderDTO);
+  }, 
 
   /**
    * 获取订单列表
    * @returns {Promise<Array>} - 订单列表
    */
   getOrders: () => {
-    return request.get('/orders');
-  },
+    return request.get('/orders/getOrders');
+  }, 
 
   /**
    * 获取订单详情

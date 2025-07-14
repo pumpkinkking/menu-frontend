@@ -10,12 +10,58 @@ export const uploadMenu = async (menuData) => {
 };
 
 /**
+ * 批量上传餐单
+ * @param {Array} menuDataList - 餐单数据列表，需符合MenuDTO格式
+ * @returns {Promise<ResultListLong>} - 包含新餐单ID列表的响应结果
+ */
+export const batchUploadMenu = async (menuDataList) => {
+  return await api.post('/menus/batch', menuDataList);
+};
+
+/**
+ * 按分类浏览餐单
+ * @param {number} categoryId - 分类ID
+ * @param {number} [pageNum=1] - 页码
+ * @param {number} [pageSize=10] - 每页条数
+ * @returns {Promise<ResultIPageMenuVO>} - 包含分页菜单列表的响应结果
+ */
+export const getMenusByCategory = async (categoryId, pageNum = 1, pageSize = 10) => {
+  return await api.get(`/menus/category/${categoryId}`, {
+    params: { pageNum, pageSize }
+  });
+};
+
+/**
  * 获取菜单详情
  * @param {number} id - 菜单ID
  * @returns {Promise<ResultMenuDetailVO>} - 包含菜单详情的响应结果
  */
 export const getMenuDetail = async (id) => {
   return await api.get(`/menus/${id}`);
+};
+
+/**
+ * 按热门程度浏览餐单
+ * @param {number} [pageNum=1] - 页码
+ * @param {number} [pageSize=10] - 每页条数
+ * @returns {Promise<ResultIPageMenuVO>} - 包含分页菜单列表的响应结果
+ */
+export const getHotMenus = async (pageNum = 1, pageSize = 10) => {
+  return await api.get('/menus/hot', {
+    params: { pageNum, pageSize }
+  });
+};
+
+/**
+ * 按最新上传浏览餐单
+ * @param {number} [pageNum=1] - 页码
+ * @param {number} [pageSize=10] - 每页条数
+ * @returns {Promise<ResultIPageMenuVO>} - 包含分页菜单列表的响应结果
+ */
+export const getNewestMenus = async (pageNum = 1, pageSize = 10) => {
+  return await api.get('/menus/newest', {
+    params: { pageNum, pageSize }
+  });
 };
 
 /**

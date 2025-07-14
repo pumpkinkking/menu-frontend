@@ -16,7 +16,7 @@ module.exports = {
   // 开发服务器配置
     devServer: {
       // 端口号
-      port: 8080,
+      port: 8082,
       // 自动打开浏览器
       open: true,
       // 代理配置

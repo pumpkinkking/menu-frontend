@@ -9,8 +9,8 @@ const ingredientApi = {
    * @returns {Promise<Array>} - 食材列表
    */
   getIngredients: () => {
-    return request.get('/ingredients');
-  },
+    return request.get('/ingredients/getIngredients');
+  }, 
 
   /**
    * 添加食材
@@ -23,8 +23,8 @@ const ingredientApi = {
    * @returns {Promise<number>} - 食材ID
    */
   addIngredient: (ingredientDTO) => {
-    return request.post('/ingredients', ingredientDTO);
-  },
+    return request.post('/ingredients/addIngredient', ingredientDTO);
+  }, 
 
   /**
    * 删除食材
@@ -40,8 +40,8 @@ const ingredientApi = {
    * @returns {Promise<Array>} - 菜篮子列表
    */
   getBasketItems: () => {
-    return request.get('/basket');
-  },
+    return request.get('/basket/getBasketItems');
+  }, 
 
   /**
    * 添加食材到菜篮子
@@ -52,8 +52,8 @@ const ingredientApi = {
    * @returns {Promise<number>} - 菜篮子项目ID
    */
   addToBasket: (basketDTO) => {
-    return request.post('/basket', basketDTO);
-  },
+    return request.post('/basket/addToBasket', basketDTO);
+  }, 
 
   /**
    * 从菜篮子移除食材

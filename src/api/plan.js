@@ -5,9 +5,9 @@ import request from './axios';
  * @param {string} date - 日期，格式YYYY-MM-DD
  * @returns {Promise}
  */
-export function getMealsByDate(date) {
+export function getMealPlans() {
   return request({
-    url: `/meals?date=${date}`,
+    url: '/plans/listPlans',
     method: 'get'
   });
 }
@@ -21,11 +21,11 @@ export function getMealsByDate(date) {
  * @param {Array} meals.dinner - 晚餐菜品列表
  * @returns {Promise}
  */
-export function updateMealPlan(date, meals) {
+export function updateMealPlan(id, plan) {
   return request({
-    url: `/meals/${date}`,
+    url: `/plans/${id}`,
     method: 'put',
-    data: meals
+    data: plan
   });
 }
 
@@ -35,9 +35,10 @@ export function updateMealPlan(date, meals) {
  * @param {string} endDate - 结束日期，格式YYYY-MM-DD
  * @returns {Promise}
  */
-export function getWeeklyMealPlan(startDate, endDate) {
-  return request({
-    url: `/meals/weekly?start=${startDate}&end=${endDate}`,
-    method: 'get'
-  });
-}
+// 文档中未定义周计划接口，暂时注释
+// export function getWeeklyMealPlan(startDate, endDate) {
+//   return request({
+//     url: `/plans/weekly?start=${startDate}&end=${endDate}`,
+//     method: 'get'
+//   });
+// }
