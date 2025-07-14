@@ -23,19 +23,19 @@
       <!-- 菜谱广场内容区域 -->
       <view class="tab-content">
         <!-- 厨房Tab -->
-        <Fridge v-if="currentTab === 0" :ingredients="ingredients" @add-ingredient="handleAddIngredient" />
+        <Fridge v-if="currentTab === 0" @add-ingredient="handleAddIngredient" />
 
         <!-- 点菜Tab -->
         <Menu v-if="currentTab === 1" :menu-categories="menuCategories" :menu-items="menuItems" @category-click="handleCategoryClick" @add-to-cart="addToCart" />
 
         <!-- 订单Tab -->
-        <Order v-if="currentTab === 2" :order-filters="orderFilters" :orders="orders" @filter-click="handleFilterClick" @pay-order="payOrder" />
+        <Order v-if="currentTab === 2" @filter-click="handleFilterClick" @pay-order="payOrder" />
 
         <!-- 商店Tab -->
         <Shop v-if="currentTab === 3" :product-categories="productCategories" :products="products" @category-click="handleCategoryClick" @add-to-cart="addToCart" @add-reward="handleAddReward" />
 
         <!-- 菜谱广场Tab -->
-        <RecipeSquare v-if="currentTab === 4" :recipe-categories="recipeCategories" :recipes="recipes" @category-click="handleCategoryClick" />
+        <RecipeSquare v-if="currentTab === 4" @category-click="handleCategoryClick" />
 
         <!-- 菜篮子Tab -->
         <Basket v-if="currentTab === 5" :menu-items="menuItems" :basket-items="basketItems" />
@@ -47,10 +47,8 @@
 </template>
 
 <script>
-import orderApi from '@/api/order';
-import * as menuApi from '@/api/menu';
-import ingredientApi from '@/api/ingredient';
-import { tabs, orderFilters } from '@/mock/data';
+import { tabs } from '@/mock/data';
+import ingredientApi from '@/api/ingredient'; // 保留用于添加食材功能
 import Fridge from './subpages/Fridge.vue';
 import Menu from './subpages/Menu.vue';
 import Order from './subpages/Order.vue';
@@ -69,15 +67,8 @@ export default {
   data() {
     return {
       currentTab: 0, // 当前选中的Tab索引，默认厨房
-      recipeCategories: [],
       menuCategories: [],
       productCategories: [],
-      orderFilters,
-      recipes: [],
-      ingredients: [],
-      menuItems: [],
-      orders: [],
-      products: [],
       statsData: [],
       tabs,
       basketItems: []
@@ -93,42 +84,7 @@ export default {
       /**
        * 从API加载订单数据
        */
-      loadOrders() {
-      orderApi.getOrders()
-        .then(response => {
-          this.orders = response.data;
-        })
-        .catch(error => {
-          uni.showToast({ title: '订单数据加载失败', icon: 'error' });
-          console.error('Failed to load orders:', error);
-        });
-    },
-    /**
-     * 从API加载食材数据
-     */
-    loadIngredients() {
-      ingredientApi.getIngredients()
-        .then(response => {
-          this.ingredients = response.data;
-        })
-        .catch(error => {
-          uni.showToast({ title: '食材数据加载失败', icon: 'error' });
-          console.error('Failed to load ingredients:', error);
-        });
-    },
-    /**
-     * 从API加载菜谱数据
-     */
-    loadRecipes() {
-      menuApi.searchMenus()
-        .then(response => {
-          this.recipes = response.data;
-        })
-        .catch(error => {
-          uni.showToast({ title: '菜谱数据加载失败', icon: 'error' });
-          console.error('Failed to load recipes:', error);
-        });
-    },
+  
       // 处理分类点击事件
       handleCategoryClick(category) {
         // 重置同类型所有分类的active状态

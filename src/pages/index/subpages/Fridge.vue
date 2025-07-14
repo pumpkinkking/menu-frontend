@@ -48,13 +48,6 @@ export default {
     AddIngredientForm
   },
 
-  props: {
-    ingredients: {
-      type: Array,
-      required: true,
-      description: '冰箱食材数据'
-    }
-  },
   data() {
     return {
         currentLocation: 'all', // all, 冷藏, 冷冻, 常温
@@ -75,8 +68,12 @@ export default {
         '新鲜': 'fresh',
         '一般': 'normal',
         '过期': 'expired'
-      }
+      },
+      ingredients: []
       };
+  },
+  mounted() {
+    this.loadIngredients();
   },
   computed: {
     /**
@@ -90,6 +87,19 @@ export default {
     }
   },
   methods: {
+    /**
+     * 加载食材数据
+     */
+    loadIngredients() {
+      ingredientApi.getIngredients()
+        .then(response => {
+          this.ingredients = response.data;
+        })
+        .catch(error => {
+          uni.showToast({ title: '食材数据加载失败', icon: 'error' });
+          console.error('Failed to load ingredients:', error);
+        });
+    },
     /**
      * 根据新鲜度获取对应的样式类
      * @param {string} freshness - 新鲜度状态

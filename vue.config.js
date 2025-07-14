@@ -16,19 +16,9 @@ module.exports = {
   // 开发服务器配置
     devServer: {
       // 端口号
-      port: 8082,
+      port: 8080,
       // 自动打开浏览器
-      open: true,
-      // 代理配置
-      proxy: {
-        '/api': {
-          target: 'http://106.52.97.177:8090',
-          changeOrigin: true,
-          pathRewrite: {
-            '^/api': '/api'
-          }
-        }
-      }
+      open: true
     },
 
   // webpack配置
@@ -40,7 +30,7 @@ module.exports = {
       }
     },
     // 开发环境配置
-    devtool: process.env.NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : 'source-map'
+    devtool: process.env.NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : 'none'
   },
 
   // css相关配置
@@ -53,7 +43,7 @@ module.exports = {
     loaderOptions: {
       sass: {
         // 全局引入变量和mixin
-        additionalData: `@import "@/uni.css";`
+        additionalData: `@import "@/uni.scss";`
       }
     }
   },

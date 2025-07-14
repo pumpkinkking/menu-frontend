@@ -40,19 +40,31 @@
  * 展示订单筛选和订单列表，支持订单支付功能
  */
 export default {
-  props: {
-    orderFilters: {
-      type: Array,
-      required: true,
-      description: '订单筛选器数据'
-    },
-    orders: {
-      type: Array,
-      required: true,
-      description: '订单列表数据'
-    }
+  data() {
+    return {
+      orderFilters: [],
+      orders: []
+    };
+  },
+  mounted() {
+    this.loadOrders();
+    // 从mock导入订单筛选器数据
+    this.orderFilters = require('@/mock/data').orderFilters;
   },
   methods: {
+    /**
+     * 加载订单数据
+     */
+    loadOrders() {
+      orderApi.getOrders()
+        .then(response => {
+          this.orders = response.data;
+        })
+        .catch(error => {
+          uni.showToast({ title: '订单数据加载失败', icon: 'error' });
+          console.error('Failed to load orders:', error);
+        });
+    },
     /**
      * 处理筛选器点击事件
      * @param {Object} filter - 点击的筛选器对象

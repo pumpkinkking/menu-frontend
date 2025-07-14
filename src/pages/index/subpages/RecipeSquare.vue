@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import menuApi from '@/api/menu';
 /**
  * 菜谱广场Tab组件
  * 展示菜谱分类和菜谱列表
@@ -45,7 +46,8 @@ export default {
       cuisineIndex: 0,
       categories: ['品类', '蔬菜', '肉类', '海鲜', '豆制品', '菌菇类', '主食'],
       mealTimes: ['餐时', '早饭', '中饭', '晚饭'],
-      cuisines: ['菜系', '鲁菜', '川菜', '粤菜', '苏菜', '闽菜', '浙菜', '湘菜', '徽菜']
+      cuisines: ['菜系', '鲁菜', '川菜', '粤菜', '苏菜', '闽菜', '浙菜', '湘菜', '徽菜'],
+      recipes: []
     };
   },
   computed: {
@@ -81,15 +83,24 @@ export default {
       return result;
     }
   },
-  props: {
 
-    recipes: {
-      type: Array,
-      required: true,
-      description: '菜谱列表数据'
-    }
+  mounted() {
+    this.loadRecipes();
   },
   methods: {
+    /**
+     * 加载菜谱数据
+     */
+    loadRecipes() {
+      menuApi.searchMenus()
+        .then(response => {
+          this.recipes = response.data;
+        })
+        .catch(error => {
+          uni.showToast({ title: '菜谱数据加载失败', icon: 'error' });
+          console.error('Failed to load recipes:', error);
+        });
+    },
     /**
      * 切换筛选类型
      * @param {string} type - 筛选类型(recommend/category/mealTime/cuisine)
