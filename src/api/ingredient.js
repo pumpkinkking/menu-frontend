@@ -3,7 +3,8 @@ import request from './axios';
 /**
  * 食材相关API接口封装
  */
-const ingredientApi = {
+// 食材服务公共方法集合
+export const ingredientService = {
   /**
    * 获取食材列表
    * @returns {Promise<Array>} - 食材列表
@@ -65,4 +66,12 @@ const ingredientApi = {
   }
 };
 
-export default ingredientApi;
+// 导出所有服务方法
+export const { 
+  getIngredients,
+  addIngredient,
+  deleteIngredient,
+  getBasketItems,
+  addToBasket,
+  removeFromBasket 
+} = ingredientService;

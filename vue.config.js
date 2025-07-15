@@ -30,7 +30,7 @@ module.exports = {
       }
     },
     // 开发环境配置
-    devtool: process.env.NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : 'none'
+    devtool: process.env.NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : false
   },
 
   // css相关配置

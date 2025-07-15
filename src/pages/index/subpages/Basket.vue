@@ -30,6 +30,7 @@
 
 <script>
 import AddToBasketForm from '@/components/AddToBasketForm.vue';
+import { getBasketItems } from '@/api/ingredient.js';
 
 /**
  * 菜篮子组件 - 用于管理需要购买的食材
@@ -42,9 +43,7 @@ export default {
   },
   props: {
     // 从父组件接收菜单数据
-    menuItems: { type: Array, required: true },
-    // 双向绑定菜篮子数据
-    basketItems: { type: Array, required: true }
+    menuItems: { type: Array, required: true }
   },
   data() {
     return {
@@ -57,46 +56,34 @@ export default {
       // 菜品弹窗显示状态
       showDishes: false,
       // 添加食材表单弹窗显示状态
-      showAddFormDialog: false
-      };
+      showAddFormDialog: false,
+      // 菜篮子数据
+      basketItems: []
+    };
+  },
+  mounted() {
+    this.initBasket();
   },
   methods: {
     /**
-     * 显示添加食材表单
+     * 初始化菜篮子数据
      */
-    showAddForm() {
-      this.showAddFormDialog = true;
-    },
-    /**
-     * 关闭添加食材表单
-     */
-    closeAddForm() {
-      this.showAddFormDialog = false;
-    },
-    /**
-     * 处理表单提交
-     */
-    handleFormSubmit(formData) {
-      // 检查是否已存在同名食材
-      const existingIndex = this.basketItems.findIndex(
-        item => item.name === formData.name
-      );
-      
-      if (existingIndex > -1) {
-        // 如果已存在，增加数量
-        this.basketItems[existingIndex].quantity += (formData.quantity || 1);
-      } else {
-        // 如果不存在，添加新食材
-        this.basketItems.push({
-          name: formData.name,
-          quantity: formData.quantity || 1,
-          unit: formData.unit || '份',
-          notes: formData.notes || ''
-        });
+    async initBasket() {
+      try {
+        // 获取当前用户ID（假设从本地存储获取）
+        const userId = uni.getStorageSync('userId');
+        if (!userId) {
+          uni.showToast({ title: '请先登录', icon: 'none' });
+          return;
+        }
+        
+        // 调用API获取菜篮子数据
+        const response = await getBasketItems(userId);
+        this.basketItems = response.data || [];
+      } catch (error) {
+        uni.showToast({ title: '加载菜篮子失败', icon: 'error' });
+        console.error('Failed to load basket items:', error);
       }
-      
-      uni.showToast({ title: '添加成功', icon: 'success' });
-      this.closeAddForm();
     },
     /**
      * 显示添加食材表单

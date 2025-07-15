@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 创建axios实例
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? 'http://106.52.97.177:8090' : '/api', // 根据环境切换API地址
+  baseURL: process.env.NODE_ENV === 'http://106.52.97.177:8090', // 根据环境切换API地址
   timeout: 5000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json;charset=utf-8'

@@ -34,6 +34,7 @@ export default {
           console.log('微信登录成功', res.code);
           // 模拟登录成功
           uni.setStorageSync('isLogin', true);
+          uni.setStorageSync('userId', 'qly');
           uni.switchTab({ url: '/pages/index/index' });
         },
         fail: (err) => {

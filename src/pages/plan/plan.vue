@@ -3,10 +3,6 @@
     <!-- 顶部导航栏 -->
     <view class="navbar">
       <view class="nav-title">自定义计划</view>
-      <view class="nav-actions">
-        <image class="nav-icon" src="/static/icons/more.svg"></image>
-        <image class="nav-icon" src="/static/icons/calendar-view.svg"></image>
-      </view>
     </view>
 
     <!-- 日历组件 -->

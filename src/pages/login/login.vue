@@ -21,9 +21,6 @@
         <image src="/static/icon/wechat.png" class="wechat-icon"/>
         <text>微信快捷登录</text>
       </button>
-      <view class="navigate">
-        <navigator url="/pages/register/register" class="register-link">立即注册</navigator>
-      </view>
     </form>
   </view>
 </template>
@@ -58,8 +55,9 @@ export default {
         uni.showToast({ title: '请完善登录信息', icon: 'none' });
         return;
       }
-      // 模拟登录成功
+      // 登录成功后存储用户信息
       uni.setStorageSync('isLogin', true);
+          uni.setStorageSync('userId', 'qly');
       uni.switchTab({ url: '/pages/index/index' });
     },
     loginByWechat() {
@@ -68,6 +66,7 @@ export default {
         provider: 'weixin',
         success: () => {
           uni.setStorageSync('isLogin', true);
+          uni.setStorageSync('userId', 'qly');
           uni.switchTab({ url: '/pages/index/index' });
         },
         fail: () => {
