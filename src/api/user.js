@@ -1,4 +1,5 @@
 import request from './axios';
+import qs from 'qs';
 
 /**
  * 用户相关API接口封装
@@ -10,8 +11,10 @@ const userApi = {
    * @returns {Promise<{token: string, userId: number}>}
    */
   wechatLogin: (code) => {
-    return request.post('/user/wechatLogin', null, {
-      params: { code }
+    return request.post('/user/wechatLogin', qs.stringify({ code }), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     });
   },
 
