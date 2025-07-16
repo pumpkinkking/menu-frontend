@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import menuApi from '@/api/menu';
+import menuService from '@/api/menu.js';
 /**
  * 菜谱广场Tab组件
  * 展示菜谱分类和菜谱列表
@@ -92,7 +92,7 @@ export default {
      * 加载菜谱数据
      */
     loadRecipes() {
-      menuApi.searchMenus()
+      menuService.searchMenus()
         .then(response => {
           this.recipes = response.data;
         })

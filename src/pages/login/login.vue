@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import userApi from '@api/user.js';
+
 export default {
   data() {
     return {
@@ -64,12 +66,31 @@ export default {
       // 调用微信登录API
       uni.login({
         provider: 'weixin',
-        success: () => {
-          uni.setStorageSync('isLogin', true);
-          uni.setStorageSync('userId', 'qly');
-          uni.switchTab({ url: '/pages/index/index' });
+        success: (res) => {
+          // 获取微信登录code
+          const code = res.code;
+          if (!code) {
+            uni.showToast({ title: '获取code失败', icon: 'none' });
+            return;
+          }
+          
+          // 调用后端微信登录接口
+          userApi.wechatLogin(code)
+            .then(response => {
+              const { token, userId } = response.data;
+              // 存储登录状态和用户信息
+              uni.setStorageSync('isLogin', true);
+              uni.setStorageSync('userId', userId);
+              uni.setStorageSync('token', token);
+              uni.switchTab({ url: '/pages/index/index' });
+            })
+            .catch(error => {
+              console.error('微信登录失败:', error);
+              uni.showToast({ title: '微信登录失败', icon: 'none' });
+            });
         },
-        fail: () => {
+        fail: (error) => {
+          console.error('获取微信登录凭证失败:', error);
           uni.showToast({ title: '微信登录失败', icon: 'none' });
         }
       });

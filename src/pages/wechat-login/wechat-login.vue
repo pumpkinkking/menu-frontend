@@ -23,22 +23,42 @@
 </template>
 
 <script>
+import userApi from '@api/user.js';
 export default {
   methods: {
+    /**
+     * 微信快捷登录功能
+     * 通过微信登录获取code，调用后端接口获取token并存储
+     */
     loginByWechat() {
       // 调用微信登录API
       uni.login({
         provider: 'weixin',
         success: (res) => {
-          // 这里应该有后端接口调用，传入code获取用户信息
-          console.log('微信登录成功', res.code);
-          // 模拟登录成功
-          uni.setStorageSync('isLogin', true);
-          uni.setStorageSync('userId', 'qly');
-          uni.switchTab({ url: '/pages/index/index' });
+          // 获取微信登录code
+          const code = res.code;
+          if (!code) {
+            uni.showToast({ title: '获取code失败', icon: 'none' });
+            return;
+          }
+          
+          // 调用后端微信登录接口
+          userApi.wechatLogin(code)
+            .then(response => {
+              const { token, userId } = response.data;
+              // 存储登录状态和用户信息
+              uni.setStorageSync('isLogin', true);
+              uni.setStorageSync('userId', userId);
+              uni.setStorageSync('token', token);
+              uni.switchTab({ url: '/pages/index/index' });
+            })
+            .catch(error => {
+              console.error('微信登录失败:', error);
+              uni.showToast({ title: '微信登录失败', icon: 'none' });
+            });
         },
-        fail: (err) => {
-          console.log('微信登录失败', err);
+        fail: (error) => {
+          console.error('获取微信登录凭证失败:', error);
           uni.showToast({ title: '微信登录失败，请重试', icon: 'none' });
         }
       });

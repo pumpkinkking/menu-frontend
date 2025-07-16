@@ -1,12 +1,57 @@
 import axios from 'axios';
 
+// 微信小程序适配器
+const wxAdapter = (config) => {
+  return new Promise((resolve, reject) => {
+    // 处理URL
+    const url = config.baseURL ? config.baseURL + config.url : config.url;
+    
+    // 处理请求方法，默认GET
+    const method = (config.method || 'get').toUpperCase();
+    
+    // 处理请求头
+    const header = { ...config.headers };
+    
+    // 微信小程序要求Content-Type小写
+    if (header['Content-Type']) {
+      header['content-type'] = header['Content-Type'];
+      delete header['Content-Type'];
+    }
+    
+    wx.request({
+      url,
+      method,
+      data: config.data,
+      header,
+      timeout: config.timeout,
+      success: (response) => {
+        resolve({
+          data: response.data,
+          status: response.statusCode,
+          statusText: '',
+          headers: response.header,
+          config: config,
+          request: response
+        });
+      },
+      fail: (error) => {
+        reject(new Error(error.errMsg || '请求失败'));
+      }
+    });
+  });
+};
+
 // 创建axios实例
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'http://106.52.97.177:8090', // 根据环境切换API地址
+  baseURL: process.env.NODE_ENV === 'production' 
+    ? 'http://localhost:8090' 
+    : '', // 根据环境切换API地址
   timeout: 5000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json;charset=utf-8'
-  }
+  },
+  // 微信小程序环境使用自定义适配器
+  adapter: process.env.UNI_PLATFORM === 'mp-weixin' ? wxAdapter : undefined
 });
 
 // 请求拦截器

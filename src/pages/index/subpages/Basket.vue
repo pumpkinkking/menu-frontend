@@ -30,7 +30,7 @@
 
 <script>
 import AddToBasketForm from '@/components/AddToBasketForm.vue';
-import { getBasketItems } from '@/api/ingredient.js';
+import ingredientService from '@/api/ingredient.js';
 
 /**
  * 菜篮子组件 - 用于管理需要购买的食材
@@ -78,7 +78,7 @@ export default {
         }
         
         // 调用API获取菜篮子数据
-        const response = await getBasketItems(userId);
+        const response = await ingredientService.getBasketList();
         this.basketItems = response.data || [];
       } catch (error) {
         uni.showToast({ title: '加载菜篮子失败', icon: 'error' });
