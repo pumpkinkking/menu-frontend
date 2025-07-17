@@ -45,7 +45,7 @@ export default {
           // 调用后端微信登录接口
           userApi.wechatLogin(code)
             .then(response => {
-              const { token, userId } = response.data;
+              const { token, userId } = response;
               // 存储登录状态和用户信息
               uni.setStorageSync('isLogin', true);
               uni.setStorageSync('userId', userId);
@@ -53,7 +53,7 @@ export default {
               uni.switchTab({ url: '/pages/index/index' });
             })
             .catch(error => {
-              console.error('微信登录失败:', error);
+              console.error('微信登录失败详情:', error);
               uni.showToast({ title: '微信登录失败', icon: 'none' });
             });
         },

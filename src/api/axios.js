@@ -73,11 +73,18 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => {
     const res = response.data;
-    if (res.code !== 200) {
+    // 先检查响应数据是否存在
+    if (res === undefined) {
+      uni.showToast({ title: '无效的响应数据', icon: 'none' });
+      return Promise.reject(new Error('无效的响应数据'));
+    }
+    // 灵活处理响应格式：如果有code字段则验证，没有则默认成功
+    if (res.code !== undefined && res.code !== 200) {
       uni.showToast({ title: res.message || '操作失败', icon: 'none' });
       return Promise.reject(res);
     }
-    return res.data; // 返回业务数据部分
+    // 根据是否有code字段决定返回数据结构
+    return res.code !== undefined ? res.data : res;
   },
   error => {
     uni.showToast({ title: '网络错误，请稍后重试', icon: 'none' });

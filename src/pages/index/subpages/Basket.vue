@@ -79,7 +79,7 @@ export default {
         
         // 调用API获取菜篮子数据
         const response = await ingredientService.getBasketList();
-        this.basketItems = response.data || [];
+        this.basketItems = response || [];
       } catch (error) {
         uni.showToast({ title: '加载菜篮子失败', icon: 'error' });
         console.error('Failed to load basket items:', error);
