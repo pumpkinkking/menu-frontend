@@ -2,7 +2,7 @@
   <view class="tab-pane">
     <!-- 二维码邀请弹窗 -->
     <qr-invite-popup 
-      v-if="showQrCodeModal"
+      v-show="showQrCodeModal"
       :show="showQrCodeModal"
       :qr-code-url="qrCodeUrl"
       @close="handleModalClose"
@@ -11,7 +11,6 @@
     ></qr-invite-popup>
 
     <add-dish-popup
-      v-if="showAddDishModal"
       :show="showAddDishModal"
       :categories="menuCategories"
       @close="handleDishPopupClose"
@@ -203,6 +202,10 @@ export default {
      * 处理分类点击事件
      * @param {string} categoryId - 分类ID，'all'表示全部
      */
+    handleInvite() {
+      this.showQrCodeModal = true;
+    },
+
     handleCategoryClick(categoryId) {
       this.activeCategoryId = categoryId;
     },
