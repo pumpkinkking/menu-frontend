@@ -1,13 +1,13 @@
 <template>
   <view class="add-dish-modal" v-if="show">
-    <view class="modal-mask" @click="handleCancel"></view>
+    <view class="modal-mask" @click="handleCancel" @touchmove.prevent catchtouchmove="true" @wheel.prevent></view>
     <view class="modal-content">
       <text class="modal-title">添加新菜品</text>
       <view class="modal-form">
         <!-- 菜品表单内容 -->
         <view class="form-group">
           <text class="form-label">菜品名称</text>
-          <input class="form-input" v-model="dish.name" placeholder="请输入菜品名称">
+          <input class="form-input" v-model="dish.name" @input="autoFillFields" placeholder="请输入菜品名称">
         </view>
         <view class="form-group">
           <text class="form-label">价格</text>
@@ -25,7 +25,14 @@
         </view>
         <view class="form-group">
           <text class="form-label">菜品图片</text>
-          <button class="upload-btn" @click="handleImageUpload">上传图片</button>
+          <button class="upload-btn" @click="handleImageUpload" :disabled="isUploading">
+            {{ isUploading ? '上传中...' : '上传图片' }}
+          </button>
+          <!-- 上传进度显示 -->
+          <view v-if="isUploading" class="upload-progress">
+            <progress :percent="uploadProgress" stroke-width="2" activeColor="#ff85a2" backgroundColor="#eee" />
+            <text class="progress-text">{{ uploadProgress }}%</text>
+          </view>
         </view>
       </view>
       <view class="modal-buttons">
@@ -37,6 +44,7 @@
 </template>
 
 <script>
+import menuService from '@/api/menu';
 export default {
   props: {
     show: {
@@ -54,12 +62,16 @@ export default {
     return {
       dish: {
         name: '',
-        price: 0,
-        calories: 0,
+        price: '',
+        calories: '',
         categoryId: '',
         image: ''
       },
-      selectedCategory: null
+      selectedCategory: null,
+      // 上传状态管理
+      uploadProgress: 0, // 上传进度(0-100)
+      isUploading: false, // 是否正在上传
+      uploadId: null // 分片上传ID
     };
   },
   methods: {
@@ -75,13 +87,161 @@ export default {
     /**
      * 处理图片上传
      */
-    handleImageUpload() {
-      uni.chooseImage({
-        count: 1,
-        success: (res) => {
-          this.dish.image = res.tempFilePaths[0];
+    /**
+   * 处理图片上传，调用menu.js中的上传接口
+   */
+  /**
+   * 处理图片分片上传并显示进度
+   * 实现逻辑：选择文件→初始化上传→分片上传→完成上传→更新进度
+   */
+  async handleImageUpload() {
+    const that = this;
+    uni.chooseImage({
+      count: 1,
+      success: async (res) => {
+        that.isUploading = true;
+        that.uploadProgress = 0;
+
+        try {
+          const tempFilePath = res.tempFilePaths[0];
+          // 获取文件信息
+          const fileInfo = await wx.getFileInfo({
+            filePath: tempFilePath
+          });
+          const fileSize = fileInfo.size;
+
+          // 1. 初始化上传
+          const uploadId = await menuService.imageUpload.initialize();
+          console.log('初始化上传ID:', uploadId);
+          that.uploadId = uploadId;
+
+          // 2. 配置分片参数
+          const chunkSize = 2 * 1024 * 1024; // 2MB/片
+          const totalChunks = Math.ceil(fileSize / chunkSize);
+          const fileManager = wx.getFileSystemManager();
+          // 3. 读取文件内容
+          const fileData = await new Promise((resolve, reject) => {
+            fileManager.readFile({
+              filePath: tempFilePath,
+              success: (res) => resolve(res.data),
+              fail: (err) => reject(new Error(`读取文件失败: ${err.errMsg}`))
+            });
+          });
+          // 4. 分片上传
+          for (let i = 0; i < totalChunks; i++) {
+            const start = i * chunkSize;
+            const end = Math.min(start + chunkSize, fileSize);
+            const chunkData = fileData.slice(start, end);
+
+            // 创建临时文件存储分片数据
+            const tempChunkPath = `${wx.env.USER_DATA_PATH}/chunk_${uploadId}_${i+1}`;
+            fileManager.writeFile({
+              filePath: tempChunkPath,
+              data: chunkData,
+              encoding: 'binary',
+              success: () => {},
+              fail: (err) => reject(new Error(`写入分片失败: ${err.errMsg}`))
+            });
+
+            // 上传当前分片
+            await menuService.imageUpload.uploadChunk({
+              uploadId: uploadId,
+              chunkNumber: i + 1, // 分片序号从1开始
+              chunkFile: tempChunkPath // 传递临时文件路径而非Blob
+            });
+
+            // 上传完成后清理临时文件
+            fileManager.unlinkSync(tempChunkPath);
+
+            // 更新进度
+            that.uploadProgress = Math.floor(((i + 1) / totalChunks) * 100);
+          }
+
+          // 5. 完成上传（合并分片）
+          const result = await menuService.imageUpload.complete({
+            uploadId: uploadId,
+            thumbnailWidth: 200,
+            thumbnailHeight: 200
+          });
+
+          // 6. 上传成功处理
+          that.dish.originalUrl = result.originalUrl; // 原图URL
+          that.dish.thumbnailUrl = result.thumbnailUrl; // 缩略图URL
+          uni.showToast({
+            title: '图片上传成功',
+            icon: 'success'
+          });
+
+        } catch (error) {
+          console.error('上传失败:', error);
+          uni.showToast({
+            title: `上传失败: ${error.message}`,
+            icon: 'none',
+            duration: 3000
+          });
+        } finally {
+          // 重置上传状态
+          that.isUploading = false;
+          that.uploadProgress = 0;
+          that.uploadId = null;
         }
-      });
+      },
+      fail: (err) => {
+        that.isUploading = false;
+        console.error('选择图片失败:', err);
+        uni.showToast({
+          title: '选择图片失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
+    /**
+     * 根据菜品名称自动填充卡路里和分类
+     */
+    autoFillFields() {
+      if (!this.dish.name) return;
+      
+      // 简单的菜品卡路里映射示例
+      const caloriesMap = {
+        '宫保鸡丁': 350,
+        '鱼香肉丝': 320,
+        '麻婆豆腐': 280,
+        '青椒土豆丝': 150,
+        '西红柿炒蛋': 180,
+        '红烧肉': 450,
+        '清蒸鱼': 200,
+        '炒青菜': 100
+      };
+      
+      // 根据名称匹配卡路里
+      const lowerName = this.dish.name.toLowerCase();
+      for (const [name, calories] of Object.entries(caloriesMap)) {
+        if (lowerName.includes(name.toLowerCase())) {
+          this.dish.calories = calories;
+          break;
+        }
+      }
+      
+      // 根据名称关键词匹配分类
+      const categoryKeywords = [
+        { keywords: ['肉', '牛排', '猪', '牛', '羊', '鸡'], id: 'meat' },
+        { keywords: ['鱼', '虾', '海鲜', '贝', '蟹'], id: 'seafood' },
+        { keywords: ['蔬菜', '青菜', '豆腐', '菌', '菇'], id: 'vegetable' },
+        { keywords: ['汤', '羹', '粥'], id: 'soup' },
+        { keywords: ['主食', '米饭', '面条', '馒头', '包子'], id: 'staple' }
+      ];
+      
+      for (const { keywords, id } of categoryKeywords) {
+        if (keywords.some(keyword => lowerName.includes(keyword.toLowerCase()))) {
+          const matchedCategory = this.categories.find(cat => cat.id === id);
+          if (matchedCategory) {
+            this.selectedCategory = matchedCategory;
+            this.dish.categoryId = id;
+            break;
+          }
+        }
+      }
     },
     /**
      * 处理取消按钮点击事件
@@ -92,28 +252,43 @@ export default {
     /**
      * 处理确认添加按钮点击事件
      */
-    handleConfirm() {
+    /**
+   * 处理确认添加，调用menu.js中的创建菜品接口
+   */
+  async handleConfirm() {
       // 表单验证
-      if (!this.dish.name || !this.dish.price || !this.dish.categoryId) {
+      if (!this.dish.name) {
         uni.showToast({
-          title: '请填写必填字段',
+          title: '请填写菜品名称',
           icon: 'none'
         });
         return;
       }
 
-      // 触发添加事件，将菜品数据传递给父组件
-      this.$emit('add', this.dish);
-
-      // 重置表单
-      this.dish = {
-        name: '',
-        price: 0,
-        calories: 0,
-        categoryId: '',
-        image: ''
-      };
-      this.selectedCategory = null;
+      try {
+        // 调用menu.js中的创建菜品接口
+        await menuService.uploadMenu(this.dish);
+        uni.showToast({
+          title: '菜品添加成功',
+          icon: 'success'
+        });
+        this.$emit('close');
+        // 重置表单
+        this.dish = {
+          name: '',
+          price: '',
+          calories: '',
+          categoryId: '',
+          image: ''
+        };
+        this.selectedCategory = null;
+      } catch (error) {
+        uni.showToast({
+          title: '添加失败，请重试',
+          icon: 'none'
+        });
+        console.error('菜品添加失败:', error);
+      }
     }
   }
 };

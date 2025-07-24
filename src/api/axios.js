@@ -44,12 +44,12 @@ const wxAdapter = (config) => {
 // 创建axios实例
 const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production' 
-    ? 'http://localhost:8090' 
+    ? 'http://192.168.250.55:8090' 
     : '', // 根据环境切换API地址
   timeout: 5000, // 请求超时时间
-  headers: {
-    'Content-Type': 'application/json;charset=utf-8'
-  },
+  // headers: {
+  //   'Content-Type': 'application/json;charset=utf-8'
+  // },
   // 微信小程序环境使用自定义适配器
   adapter: process.env.UNI_PLATFORM === 'mp-weixin' ? wxAdapter : undefined
 });

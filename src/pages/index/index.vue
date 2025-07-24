@@ -66,7 +66,7 @@ export default {
   },
   data() {
     return {
-      currentTab: 0, // 当前选中的Tab索引，默认厨房
+      currentTab: 1, // 当前选中的Tab索引，默认点菜
       menuCategories: [],
       productCategories: [],
       statsData: [],

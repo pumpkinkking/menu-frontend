@@ -1,5 +1,6 @@
 <template>
-  <view class="tab-pane">
+    <page-meta :page-style="{ overflow: (showAddDishModal || showQrCodeModal) ? 'hidden !important' : 'auto' }"></page-meta>
+    <view class="tab-pane">
     <!-- 二维码邀请弹窗 -->
     <qr-invite-popup 
       v-show="showQrCodeModal"
@@ -11,6 +12,7 @@
     ></qr-invite-popup>
 
     <add-dish-popup
+      v-if="showAddDishModal" 
       :show="showAddDishModal"
       :categories="menuCategories"
       @close="handleDishPopupClose"
@@ -23,7 +25,7 @@
       <input 
         type="text"
         v-model="searchKeyword"
-        placeholder="搜索菜品..."
+        placeholder="搜索菜品"
         class="search-input"
         @input="handleSearch"
       >
@@ -31,7 +33,7 @@
 
     <view class="main-content">
       <!-- 左侧分类栏 -->
-      <view class="category-sidebar">
+      <view class="category-sidebar" :style="{ overflowY: showAddDishModal || showQrCodeModal ? 'hidden' : 'auto' }">
         <view 
           class="category-item"
           :class="activeCategoryId === 'all' ? 'active' : ''"
@@ -54,7 +56,7 @@
       </view>
 
       <!-- 右侧菜品展示区 -->
-      <view class="dish-container">
+      <view class="dish-container" :style="{ overflowY: showAddDishModal || showQrCodeModal ? 'hidden' : 'auto' }">
         <!-- 添加菜品按钮 -->
         <view class="add-dish-btn" @click="showAddDishModal = true">
           <uni-icons type="plus" size="24"></uni-icons>
@@ -135,6 +137,7 @@ export default {
       showQrCodeModal: false,
       qrCodeUrl: '/static/images/invite-qr.png', // 二维码图片路径
       showAddDishModal: false, // 添加菜品弹窗显示状态
+
       searchKeyword: '', // 搜索关键词
       activeCategoryId: 'all', // 当前选中分类ID
       menuCategories: [
@@ -183,20 +186,7 @@ export default {
       });
     }
   },
-  watch: {
-    showQrCodeModal: {
-      handler(newVal) {
-        this.toggleScrollLock(newVal);
-      },
-      immediate: true
-    },
-    showAddDishModal: {
-      handler(newVal) {
-        this.toggleScrollLock(newVal);
-      },
-      immediate: true
-    }
-  },
+  
   methods: {
     /**
      * 处理分类点击事件

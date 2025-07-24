@@ -1,31 +1,8 @@
 import api from './axios';
+import qs from 'qs';
 
 // 统一API路径前缀，减少重复书写
 const MENU_API_PREFIX = '/menus';
-
-/**
- * 统一响应处理（成功/错误拦截）
- * @param {Promise} requestPromise - axios请求Promise
- * @returns {Promise} - 处理后的响应数据（仅返回业务数据）
- */
-const handleResponse = async (requestPromise) => {
-  try {
-    const response = await requestPromise;
-    // 假设后端响应格式为 { code: 200, data: ..., message: '' }
-    if (response.data?.code === 200) {
-      return response.data.data; // 只返回业务数据，简化调用处处理
-    }
-    // 非200状态码视为业务错误（如参数错误、权限问题）
-    const errorMsg = response.data?.message || '请求失败，请重试';
-    console.error(`API错误: ${errorMsg}`);
-    throw new Error(errorMsg);
-  } catch (error) {
-    // 网络错误或其他异常
-    const errorMsg = error.message || '网络异常，请检查连接';
-    console.error(`请求异常: ${errorMsg}`);
-    throw new Error(errorMsg); // 抛出自定义错误，让调用处可捕获
-  }
-};
 
 /**
  * 菜单相关API接口封装
@@ -37,7 +14,7 @@ export const menuService = {
    * @returns {Promise<number>} - 新菜单ID
    */
   uploadMenu: (menuData) => {
-    return handleResponse(api.post(MENU_API_PREFIX, menuData));
+    return api.post(`${MENU_API_PREFIX}/upload`, menuData);
   },
 
   /**
@@ -46,7 +23,7 @@ export const menuService = {
    * @returns {Promise<Array<number>>} - 新餐单ID列表
    */
   batchUploadMenu: (menuDataList) => {
-    return handleResponse(api.post(`${MENU_API_PREFIX}/batch`, menuDataList));
+    return api.post(`${MENU_API_PREFIX}/batchUpload`, menuDataList);
   },
 
   /**
@@ -58,11 +35,9 @@ export const menuService = {
    * @returns {Promise<IPage<MenuVO>>} - 分页菜单列表
    */
   getMenusByCategory: ({ categoryId, pageNum = 1, pageSize = 10 }) => {
-    return handleResponse(
-      api.get(`${MENU_API_PREFIX}/category/${categoryId}`, {
+    return api.get(`${MENU_API_PREFIX}/category/${categoryId}`, {
         params: { pageNum, pageSize }
-      })
-    );
+      });
   },
 
   /**
@@ -71,7 +46,7 @@ export const menuService = {
    * @returns {Promise<MenuDetailVO>} - 菜单详情
    */
   getMenuDetail: (id) => {
-    return handleResponse(api.get(`${MENU_API_PREFIX}/${id}`));
+    return api.get(`${MENU_API_PREFIX}/${id}`);
   },
 
   /**
@@ -82,11 +57,9 @@ export const menuService = {
    * @returns {Promise<IPage<MenuVO>>} - 分页菜单列表
    */
   getHotMenus: ({ pageNum = 1, pageSize = 10 } = {}) => {
-    return handleResponse(
-      api.get(`${MENU_API_PREFIX}/hot`, {
+    return api.get(`${MENU_API_PREFIX}/hot`, {
         params: { pageNum, pageSize }
-      })
-    );
+      });
   },
 
   /**
@@ -97,11 +70,9 @@ export const menuService = {
    * @returns {Promise<IPage<MenuVO>>} - 分页菜单列表
    */
   getNewestMenus: ({ pageNum = 1, pageSize = 10 } = {}) => {
-    return handleResponse(
-      api.get(`${MENU_API_PREFIX}/newest`, {
+    return api.get(`${MENU_API_PREFIX}/newest`, {
         params: { pageNum, pageSize }
-      })
-    );
+      });
   },
 
   /**
@@ -116,11 +87,9 @@ export const menuService = {
     if (!keyword) {
       throw new Error('搜索关键词不能为空'); // 提前校验参数
     }
-    return handleResponse(
-      api.get(`${MENU_API_PREFIX}/search`, {
+    return api.get(`${MENU_API_PREFIX}/search`, {
         params: { keyword, pageNum, pageSize }
-      })
-    );
+      });
   },
 
   /**
@@ -129,7 +98,7 @@ export const menuService = {
    * @returns {Promise<boolean>} - 收藏状态（true为成功）
    */
   collectMenu: (id) => {
-    return handleResponse(api.post(`${MENU_API_PREFIX}/${id}/collect`));
+    return api.post(`${MENU_API_PREFIX}/${id}/collect`);
   },
 
   /**
@@ -138,7 +107,7 @@ export const menuService = {
    * @returns {Promise<boolean>} - 取消收藏状态（true为成功）
    */
   cancelCollectMenu: (id) => {
-    return handleResponse(api.delete(`${MENU_API_PREFIX}/${id}/collect`));
+    return api.delete(`${MENU_API_PREFIX}/${id}/collect`);
   },
 
   /**
@@ -148,19 +117,15 @@ export const menuService = {
     /**
      * 初始化菜单图片上传
      * @param {Object} params - 初始化参数
-     * @param {number} params.userId - 用户ID
      * @param {string} params.fileName - 文件名（含后缀）
      * @returns {Promise<string>} - 上传ID（用于后续分片上传）
      */
-    initialize: ({ userId, fileName }) => {
-      if (!userId || !fileName) {
-        throw new Error('用户ID和文件名不能为空');
-      }
-      return handleResponse(
-        api.post(`${MENU_API_PREFIX}/image/initialize`, null, {
-          params: { userId, fileName }
-        })
-      );
+    initialize: () => {
+      /**
+       * 初始化菜单图片上传
+       * @returns {Promise<String>} 上传ID
+       */
+      return api.post(`${MENU_API_PREFIX}/image/initialize`);
     },
 
     /**
@@ -172,17 +137,34 @@ export const menuService = {
      * @returns {Promise<void>} - 无返回值（成功即表示分片上传完成）
      */
     uploadChunk: ({ uploadId, chunkNumber, chunkFile }) => {
-      if (!uploadId || !chunkNumber || !chunkFile) {
-        throw new Error('上传ID、分片序号和文件不能为空');
-      }
-      const formData = new FormData();
-      formData.append('chunkFile', chunkFile);
-      return handleResponse(
-        api.post(`${MENU_API_PREFIX}/image/chunk`, formData, {
-          params: { uploadId, chunkNumber },
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
-      );
+        if (!uploadId || !chunkNumber || !chunkFile) {
+          throw new Error('上传ID、分片序号和文件不能为空');
+        }
+        return new Promise((resolve, reject) => {
+          // 获取本地存储的token
+          const token = uni.getStorageSync('token');
+          uni.uploadFile({
+            url: `${api.defaults.baseURL}${MENU_API_PREFIX}/image/chunk`,
+            filePath: chunkFile,
+            name: 'chunkFile',
+            method: 'POST',
+            header: token ? { 'Authorization': `Bearer ${token}` } : {},
+            formData: {
+              uploadId: uploadId,
+              chunkNumber: chunkNumber
+            },
+            success: (res) => {
+              if (res.statusCode === 200) {
+                resolve(JSON.parse(res.data));
+              } else {
+                reject(new Error(`上传失败: ${res.data}`));
+              }
+            },
+            fail: (err) => {
+              reject(new Error(`上传失败: ${err.errMsg}`));
+            }
+          });
+        });
     },
 
     /**
@@ -194,14 +176,13 @@ export const menuService = {
      * @returns {Promise<Record<string, string>>} - 图片URL映射（如 { original: '...', thumbnail: '...' }）
      */
     complete: ({ uploadId, thumbnailWidth = 200, thumbnailHeight = 200 }) => {
+      console.log('complete', uploadId, thumbnailWidth, thumbnailHeight);
       if (!uploadId) {
         throw new Error('上传ID不能为空');
       }
-      return handleResponse(
-        api.post(`${MENU_API_PREFIX}/image/complete`, null, {
-          params: { uploadId, thumbnailWidth, thumbnailHeight }
-        })
-      );
+      return api.post(`${MENU_API_PREFIX}/image/complete`, qs.stringify({ uploadId, thumbnailWidth, thumbnailHeight }), {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
     }
   }
 };
